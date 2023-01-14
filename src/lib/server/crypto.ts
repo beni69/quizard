@@ -1,6 +1,5 @@
-import { scrypt as _scrypt, randomBytes } from "node:crypto";
 import type { BinaryLike } from "node:crypto";
-// export { randomUUID } from "node:crypto";
+import { randomBytes, scrypt as _scrypt } from "node:crypto";
 
 const scrypt = async (raw: BinaryLike, salt: Buffer, length: number) =>
 	new Promise<Buffer>((res, rej) =>
@@ -10,8 +9,10 @@ const scrypt = async (raw: BinaryLike, salt: Buffer, length: number) =>
 		})
 	);
 
-export const hash = (raw: string, salt?: Buffer) =>
-	scrypt(raw, salt || randomBytes(64), 64).then((b) => b.toString("hex"));
+export const hash = (raw: string, salt: Buffer) =>
+	scrypt(raw, salt, 64).then((b) => b.toString("base64"));
 
-export const compare = async (raw: string, dbHash: string, salt: Buffer) =>
-	(await scrypt(raw, salt, 64)).toString("hex") === dbHash;
+export const compare = (raw: string, dbHash: string, salt: Buffer) =>
+	scrypt(raw, salt, 64).then((b) => b.toString("base64") === dbHash);
+
+export const genSalt = () => randomBytes(64);
