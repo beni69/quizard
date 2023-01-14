@@ -11,17 +11,20 @@ datasource db {
 }
 
 model User {
-    id       Int    @id @default(sequence())
-    email    String @unique
-    name     String @unique
-    picture  String
-    password String
+    id        String   @id @default(cuid())
+    email     String   @unique
+    name      String   @unique
+    avatar    String
+    password  String
+    salt      Bytes
+    createdAt DateTime @default(now())
 
     sets LearningSet[]
 }
 
 model LearningSet {
-    id     Int   @id @default(sequence())
-    User   User? @relation(fields: [userId], references: [id])
-    userId Int?
+    id String @id @default(cuid())
+
+    userId String
+    User   User   @relation(fields: [userId], references: [id])
 }

@@ -1,6 +1,6 @@
 import prisma from "$lib/db";
+import type { PageServerLoad } from "./$types";
 
-/** @type {import('./$types').PageServerLoad} */
-export async function load() {
-	return { sets: prisma.learningSet.findMany() };
-}
+export const load: PageServerLoad = () => {
+	sets: prisma.learningSet.findMany();
+};
