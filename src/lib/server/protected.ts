@@ -8,6 +8,7 @@ import type { User } from "@prisma/client";
 import { redirect, type ServerLoad } from "@sveltejs/kit";
 
 export const load = (async ({ parent }): Promise<{ user: User }> => {
+	console.log("checking if user is logged in");
 	const { user } = (await parent()) as { user: User | null };
 	if (!user) throw redirect(302, "/auth/login");
 

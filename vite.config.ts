@@ -1,8 +1,12 @@
-import { sveltekit } from "@sveltejs/kit/vite";
 import type { UserConfig } from "vite";
+import { sveltekit } from "@sveltejs/kit/vite";
+import UnpluginIcons from "unplugin-icons/vite";
 
-const config: UserConfig = {
-	plugins: [sveltekit()],
-};
-
-export default config;
+export default {
+	plugins: [
+		sveltekit(),
+		UnpluginIcons({
+			compiler: "svelte"
+		})
+	]
+} satisfies UserConfig;

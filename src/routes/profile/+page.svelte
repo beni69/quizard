@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SignOutBtn from "$lib/components/signOutBtn.svelte";
+	import SignOutButton from "$lib/components/SignOutButton.svelte";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
@@ -14,7 +14,7 @@
 	<p>Registered at: {new Date(data.user.createdAt).toLocaleString()}</p>
 	<img src={data.user.avatar} alt={data.user.name + " avatar"} />
 
-	<SignOutBtn />
+	<SignOutButton />
 </main>
 
 <style>
