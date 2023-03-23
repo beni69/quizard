@@ -1,50 +1,51 @@
-import { genSalt, hash } from "$lib/server/crypto";
-import prisma from "$lib/server/db";
-import { fail, redirect } from "@sveltejs/kit";
-import z from "zod";
 import type { Actions, PageServerLoad } from "./$types";
+import { error, fail, redirect } from "@sveltejs/kit";
+import z from "zod";
+import auth from "$lib/server/auth";
+import db from "$lib/server/db";
+
+export const load: PageServerLoad = async ({ locals }) => {
+	const session = await locals.validate();
+	if (session) throw redirect(302, "/profile");
+};
 
 const schema = z.object({
-	email: z.string().email(),
-	name: z.string().min(3),
-	password: z.string().min(8),
+	email: z.string({ required_error: "Email address is required!", invalid_type_error: "Invalid email address!" }).min(1, "Email address is required!").email("Invalid email address!"),
+	name: z.string().min(3, "Name must be at least 3 characters long!"),
+	password: z.string().min(8, "Password must be at least 8 characters long!"),
 });
 
 export const actions: Actions = {
-	default: async ({ cookies, request }) => {
-		const user = schema.safeParse(Object.fromEntries(await request.formData()));
-		if (!user.success) return fail(400, { formError: user.error.flatten().fieldErrors });
+	default: async ({ request, locals }) => {
+		const session = await locals.validate();
+		if (session) throw error(401);
 
-		const { email, name, password: _passwd } = user.data;
-		const salt = genSalt();
-		const password = await hash(_passwd, salt);
+		const result = schema.safeParse(Object.fromEntries(await request.formData()));
+		if (!result.success) return fail(400, { errors: result.error.flatten().fieldErrors });
+
+		const { email, name, password } = result.data;
 
 		// check if user already exists
-		const emailTaken = !!(await prisma.user.findUnique({ where: { email } }));
-		if (emailTaken) return fail(400, { taken: "email" } as const);
 
-		const nameTaken = !!(await prisma.user.findUnique({ where: { name } }));
-		if (nameTaken) return fail(400, { taken: "name" } as const);
+		const emailTaken = await db.user.findUnique({ where: { email } }) != null;
+		if (emailTaken) return fail<FieldErrors<z.infer<typeof schema>>>(400, { errors: { email: ["Email is already in use!"] } });
 
-		return prisma.user
-			.create({
-				data: {
-					email,
-					name,
-					password,
-					salt: salt.toString("base64"),
-					avatar: `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${name}`,
-				},
-			})
-			.then(() => undefined)
-			.catch((e) => {
-				console.error(e);
-				return fail(500, { error: "Something went wrong" });
-			});
-	},
-};
+		const nameTaken = await db.user.findUnique({ where: { name } }) != null;
+		if (nameTaken) return fail<FieldErrors<z.infer<typeof schema>>>(400, { errors: { name: ["Username is already taken!"] } });
 
-export const load: PageServerLoad = async ({ parent }) => {
-	const { user } = await parent();
-	if (user) throw redirect(302, "/profile");
+		await auth.createUser({
+			primaryKey: {
+				password,
+				providerId: "email",
+				providerUserId: email
+			},
+			attributes: {
+				email,
+				name,
+				avatar: `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${name}`,
+				createdAt: new Date(),
+				updatedAt: new Date()
+			}
+		});
+	}
 };

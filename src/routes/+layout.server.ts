@@ -1,14 +1,3 @@
-import prisma from "$lib/server/db";
-import { decode } from "$lib/server/jwt";
-import type { LayoutServerLoad } from "./$types";
+import { handleServerSession } from "@lucia-auth/sveltekit";
 
-export const load: LayoutServerLoad = async ({ cookies, url }) => {
-	const token = cookies.get("token");
-	if (!token) return { user: null };
-
-	const id = decode(token);
-	if (!id) return { user: null };
-
-	const user = await prisma.user.findUnique({ where: { id } });
-	return { user };
-};
+export const load = handleServerSession();

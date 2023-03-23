@@ -1,37 +1,35 @@
-import { compare } from "$lib/server/crypto";
-import prisma from "$lib/server/db";
-import { EXPIRY, sign } from "$lib/server/jwt";
-import { fail, redirect } from "@sveltejs/kit";
-import z from "zod";
 import type { Actions, PageServerLoad } from "./$types";
+import { fail, redirect } from "@sveltejs/kit";
+import auth from "$lib/server/auth";
+import z from "zod";
+import { error } from "console";
+
+export const load = (async ({ locals }) => {
+	const session = await locals.validate();
+	if (session) throw redirect(302, "/profile");
+}) satisfies PageServerLoad;
 
 const schema = z.object({
-	email: z.string().email(),
-	password: z.string().min(8),
+	email: z.string().min(1, "Email address is required!").email("Invalid email address!"),
+	password: z.string().min(8, "Passwords are at least 8 characters long!"),
 });
 
 export const actions: Actions = {
-	default: async ({ request, cookies }) => {
-		const login = schema.safeParse(Object.fromEntries(await request.formData()));
-		if (!login.success) return fail(400, { formError: login.error.flatten().fieldErrors });
-		const { email, password } = login.data;
+	default: async ({ request, locals }) => {
+		const session = await locals.validate();
+		if (session) throw error(401);
 
-		const user = await prisma.user.findUnique({ where: { email } });
-		if (!user || !(await compare(password, user.password, Buffer.from(user.salt, "base64"))))
-			return fail(400, { error: "Invalid email or password" });
-
-		cookies.set("token", sign({ id: user.id }), {
-			path: "/",
-			maxAge: EXPIRY,
-			secure: true,
-			sameSite: "lax",
-		});
-
-		throw redirect(302, "/profile");
-	},
-};
-
-export const load: PageServerLoad = async ({ parent }) => {
-	const { user } = await parent();
-	if (user) throw redirect(302, "/profile");
+		const result = schema.safeParse(Object.fromEntries(await request.formData()));
+		if (!result.success) return fail(400, { errors: result.error.flatten().fieldErrors });
+		
+		const { email, password } = result.data;
+		
+		try {
+			const key = await auth.useKey("email", email, password);
+			const session = await auth.createSession(key.userId);
+			locals.setSession(session);
+		} catch (error) {
+			return fail<FieldErrors<z.infer<typeof schema>>>(400, { errors: { email: ["Invalid email or password!"] } });
+		}
+	}
 };

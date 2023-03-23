@@ -3,11 +3,6 @@
 	import type { ActionData } from "./$types";
 
 	export let form: ActionData;
-
-	$: {
-		console.log(form);
-		if (form?.taken) alert(`${form.taken} is already taken`);
-	}
 </script>
 
 <h1>Register</h1>
@@ -15,17 +10,17 @@
 	<label>
 		Email
 		<input type="email" name="email" id="email" />
-		<span class="err">{form?.formError?.email || ""}</span>
+		<span class="err">{form?.errors?.email?.[0] ?? ""}</span>
 	</label>
 	<label>
 		Username
 		<input type="text" name="name" id="name" />
-		<span class="err">{form?.formError?.name || ""}</span>
+		<span class="err">{form?.errors?.name?.[0] ?? ""}</span>
 	</label>
 	<label>
 		Password
 		<input type="password" name="password" id="password" />
-		<span class="err">{form?.formError?.password || ""}</span>
+		<span class="err">{form?.errors?.password?.[0] ?? ""}</span>
 	</label>
 	<button type="submit">Register</button>
 </form>

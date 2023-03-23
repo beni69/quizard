@@ -3,8 +3,6 @@
 	import type { ActionData } from "./$types";
 
 	export let form: ActionData;
-
-	$: console.log(form);
 </script>
 
 <main>
@@ -13,12 +11,12 @@
 		<label>
 			Email
 			<input type="email" name="email" id="email" />
-			<span class="err">{form?.formError?.email || ""}</span>
+			<span class="err">{form?.errors?.email?.[0] ?? ""}</span>
 		</label>
 		<label>
 			Password
 			<input type="password" name="password" id="password" />
-			<span class="err">{form?.formError?.password || ""}</span>
+			<span class="err">{form?.errors?.password?.[0] ?? ""}</span>
 		</label>
 		<button type="submit">Sign in</button>
 	</form>
