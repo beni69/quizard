@@ -1,11 +1,19 @@
+const { join } = require('path');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
-        "./src/**/*.{html,js,svelte,ts,pcss}"
+        "./src/**/*.{html,js,svelte,ts,pcss}",
+        join(require.resolve(
+            '@skeletonlabs/skeleton'),
+            '../**/*.{html,js,svelte,ts}'
+        )
     ],
+    darkMode: "class",
     theme: {
         extend: {}
     },
-    plugins: [],
-    darkMode: "class"
+    plugins: [
+        ...require('@skeletonlabs/skeleton/tailwind/skeleton.cjs')()
+    ]
 };

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import "../app.pcss";
-	import { SvelteUIProvider } from "@svelteuidev/core";
 
 	import { page } from "$app/stores";
 	import { getUser, handleSession } from "@lucia-auth/sveltekit/client";
@@ -11,12 +10,10 @@
 	const user = getUser();
 </script>
 
-<SvelteUIProvider>
-	<header>
-		User: {$user?.name ?? "None"}
-	</header>
-	<main class="grow">
-		<slot />
-	</main>
-	<footer>footer</footer>
-</SvelteUIProvider>
+<header>
+	User: {$user?.name ?? "None"}
+</header>
+<main class="grow">
+	<slot />
+</main>
+<footer>footer</footer>
