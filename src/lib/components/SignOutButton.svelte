@@ -3,5 +3,5 @@
 </script>
 
 <form action="/auth/logout" method="post" use:enhance>
-	<button type="submit"><slot>Sign out</slot></button>
+	<button type="submit" {...$$props}><slot>Sign out</slot></button>
 </form>

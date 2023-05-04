@@ -8,18 +8,17 @@ datasource db {
 }
 
 model User {
-
     // required by lucia
-    id        String    @id @unique
-    session   Session[]
-    Key       Key[]
+    id      String    @id @unique
+    session Session[]
+    Key     Key[]
 
     // custom user attributes
-    email     String    @unique
-    name      String    @unique
+    email     String   @unique
+    name      String   @unique
     avatar    String
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     sets LearningSet[]
 }
@@ -31,7 +30,7 @@ model Key {
     primary         Boolean
     expires         BigInt?
 
-    user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+    user User @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
     @@index([user_id])
     @@map("key")
@@ -43,7 +42,7 @@ model Session {
     active_expires BigInt
     idle_expires   BigInt
 
-    user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+    user User @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
     @@index([user_id])
     @@map("session")
@@ -52,6 +51,18 @@ model Session {
 model LearningSet {
     id String @id @default(cuid())
 
+    cards Card[]
+
     userId String
     User   User   @relation(fields: [userId], references: [id])
+}
+
+model Card {
+    id String @id @default(cuid())
+
+    term       String
+    definition String
+
+    learningSetId String
+    learningSet   LearningSet @relation(fields: [learningSetId], references: [id])
 }

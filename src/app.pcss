@@ -1,19 +1,24 @@
-
-@import "@skeletonlabs/skeleton/themes/theme-skeleton.css";
+@import "$lib/styles/themes/default.pcss";
 @import "@skeletonlabs/skeleton/styles/all.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html {
-	@apply h-full scroll-smooth;
-    
-	& > body {
-		@apply h-full;
+html,
+body,
+#sveltekit-body {
+	@apply h-full overflow-hidden;
+}
 
-		& > #sveltekit-body {
-			@apply h-full flex flex-col;
+html {
+	@apply scroll-smooth;
+
+	& > body > #sveltekit-body {
+		@apply contents;
+
+		& main {
+			@apply p-4;
 		}
 	}
 }

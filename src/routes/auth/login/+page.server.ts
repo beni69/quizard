@@ -10,8 +10,8 @@ export const load = (async ({ locals }) => {
 }) satisfies PageServerLoad;
 
 const schema = z.object({
-	email: z.string().min(1, "Email address is required!").email("Invalid email address!"),
-	password: z.string().min(8, "Passwords are at least 8 characters long!"),
+	email: z.string().min(1, "Az e-mail cím kitöltése szükséges!").email("Érvénytelen e-mail cím!"),
+	password: z.string().min(8, "A jelszó legalább 8 karakter hosszú kell legyen!"),
 });
 
 export const actions: Actions = {
@@ -29,7 +29,7 @@ export const actions: Actions = {
 			const session = await auth.createSession(key.userId);
 			locals.setSession(session);
 		} catch (error) {
-			return fail<FieldErrors<z.infer<typeof schema>>>(400, { errors: { email: ["Invalid email or password!"] } });
+			return fail<FieldErrors<z.infer<typeof schema>>>(400, { errors: { email: ["Téves e-mail cím vagy jelszó."] } });
 		}
 	}
 };
