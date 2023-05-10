@@ -49,12 +49,16 @@ model Session {
 }
 
 model LearningSet {
-    id String @id @default(cuid())
+    id          String     @id @default(cuid())
+    
+    name        String
+    description String
+    visibility  Visibility
 
     cards Card[]
 
     userId String
-    User   User   @relation(fields: [userId], references: [id])
+    user   User   @relation(fields: [userId], references: [id])
 }
 
 model Card {
@@ -65,4 +69,10 @@ model Card {
 
     learningSetId String
     learningSet   LearningSet @relation(fields: [learningSetId], references: [id])
+}
+
+enum Visibility {
+    PUBLIC
+    UNLISTED
+    PRIVATE
 }
