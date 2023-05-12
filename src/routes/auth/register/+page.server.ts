@@ -1,37 +1,40 @@
-import type { Actions, PageServerLoad } from "./$types";
 import { error, fail, redirect } from "@sveltejs/kit";
 import z from "zod";
 import auth from "$lib/server/auth";
 import db from "$lib/server/db";
+import { superValidate, setError } from "sveltekit-superforms/server";
 
-export const load: PageServerLoad = async ({ locals }) => {
-	const session = await locals.validate();
-	if (session) throw redirect(302, "/profile");
-};
-
-const schema = z.object({
-	email: z.string({ required_error: "Email address is required!", invalid_type_error: "Invalid email address!" }).min(1, "Email address is required!").email("Invalid email address!"),
-	name: z.string().min(3, "Name must be at least 3 characters long!"),
-	password: z.string().min(8, "Password must be at least 8 characters long!"),
+const registrationSchema = z.object({
+	email: z.string().min(1, "Az e-mail cím kitöltése szükséges!").email("Érvénytelen e-mail cím!"),
+	name: z.string().min(3, "A felhasználónév legalább 3 karakter hosszú kell legyen!"),
+	password: z.string().min(8, "A jelszó legalább 8 karakter hosszú kell legyen!"),
 });
 
-export const actions: Actions = {
-	default: async ({ request, locals }) => {
-		const session = await locals.validate();
+export async function load({ locals }) {
+	const session = await locals.auth.validate();
+	if (session) throw redirect(302, "/profile");
+
+	const form = await superValidate(registrationSchema);
+	return { form };
+};
+
+export const actions = {
+	async default({ request, locals }) {
+		const session = await locals.auth.validate();
 		if (session) throw error(401);
 
-		const result = schema.safeParse(Object.fromEntries(await request.formData()));
-		if (!result.success) return fail(400, { errors: result.error.flatten().fieldErrors });
+		const form = await superValidate(request, registrationSchema);
+		if (!form.valid) return fail(400, { form });
 
-		const { email, name, password } = result.data;
+		const { email, name, password } = form.data;
 
 		// check if user already exists
 
-		const emailTaken = await db.user.findUnique({ where: { email } }) != null;
-		if (emailTaken) return fail<FieldErrors<z.infer<typeof schema>>>(400, { errors: { email: ["Email is already in use!"] } });
+		const emailTaken = await db.authUser.findUnique({ where: { email } }) != null;
+		if (emailTaken) return setError(form, "email", "Az e-mail cím már foglalt!");
 
-		const nameTaken = await db.user.findUnique({ where: { name } }) != null;
-		if (nameTaken) return fail<FieldErrors<z.infer<typeof schema>>>(400, { errors: { name: ["Username is already taken!"] } });
+		const nameTaken = await db.authUser.findUnique({ where: { name } }) != null;
+		if (nameTaken) return setError(form, "name", "A felhasználónév már foglalt!");
 
 		await auth.createUser({
 			primaryKey: {
@@ -47,5 +50,7 @@ export const actions: Actions = {
 				updatedAt: new Date()
 			}
 		});
+
+		throw redirect(302, "/auth/login");
 	}
 };

@@ -1,3 +1,4 @@
-import { handleServerSession } from "@lucia-auth/sveltekit";
-
-export const load = handleServerSession();
+export async function load({ locals }) {
+    const { user } = await locals.auth.validateUser();
+    return { user };
+}

@@ -3,7 +3,7 @@ import db from "$lib/server/db";
 import z from "zod";
 
 export async function load({locals, params}) {
-    const session = await locals.validate();
+    const session = await locals.auth.validate();
     if (!session) throw error(401);
 
     const learningSet = await db.learningSet.findFirst({
@@ -30,7 +30,7 @@ const createCardSchema = z.object({
 
 export const actions = {
     async createCard({locals, params, request}) {
-        const session = await locals.validate();
+        const session = await locals.auth.validate();
         if (!session) throw error(401);
 
         const learningSet = await db.learningSet.findFirst({

@@ -1,14 +1,13 @@
-import type { Actions } from "./$types";
 import { error, redirect } from "@sveltejs/kit";
 import auth from "$lib/server/auth";
 
-export const actions: Actions = {
-	default: async ({ locals }) => {
-		const session = await locals.validate();
+export const actions = {
+	async default ({ locals }) {
+		const session = await locals.auth.validate();
 		if (!session) throw error(401);
 
-		auth.invalidateSession(session.sessionId);
-		locals.setSession(null);
+		await auth.invalidateSession(session.sessionId);
+		locals.auth.setSession(null);
 		
 		throw redirect(302, "/");
 	}

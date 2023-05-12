@@ -1,7 +1,8 @@
 import { error } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
 
-export const load = (async ({ locals }) => {
-    const session = await locals.validate();
+export async function load({locals}) {
+    const {session, user} = await locals.auth.validateUser();
     if (!session) throw error(401);
-}) satisfies PageServerLoad;
+
+    return { user };
+}

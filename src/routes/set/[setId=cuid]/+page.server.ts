@@ -2,7 +2,7 @@ import { error } from "@sveltejs/kit";
 import db from "$lib/server/db";
 
 export async function load({ locals, params }) {
-    const session = await locals.validate();
+    const session = await locals.auth.validate();
 
     const learningSet = await db.learningSet.findUnique({
         where: {
