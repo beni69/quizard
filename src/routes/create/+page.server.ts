@@ -3,7 +3,7 @@ import db from "$lib/server/db";
 import z from "zod";
 
 export async function load({ locals }) {
-    const session = await locals.validate();
+    const session = await locals.auth.validate();
     if (!session) throw error(401);
 
     return {
@@ -23,7 +23,7 @@ const createSetSchema = z.object({
 
 export const actions = {
     async new({ locals, request }) {
-        const session = await locals.validate();
+        const session = await locals.auth.validate();
         if (!session) throw error(401);
 
         const result = createSetSchema.safeParse(Object.fromEntries(await request.formData()));

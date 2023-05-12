@@ -1,19 +1,17 @@
 <script lang="ts">
 	import SignOutButton from "$lib/components/SignOutButton.svelte";
-	import { getUser } from "@lucia-auth/sveltekit/client";
+	import type { PageData } from "./$types";
 
-	const user = getUser();
+	export var data: PageData;
 </script>
 
-<main>
-	<h1>Profile</h1>
-	<p>Username: {$user?.name}</p>
-	<p>Email: {$user?.email}</p>
-	<p>Registered at: {new Date($user?.createdAt).toLocaleString()}</p>
-	<img src={$user?.avatar} alt={$user?.name + " avatar"} />
+<h1>Profile</h1>
+<p>Username: {data.user.name}</p>
+<p>Email: {data.user.email}</p>
+<p>Registered at: {new Date(data.user.createdAt).toLocaleString()}</p>
+<img src={data.user.avatar} alt={data.user.name + " avatar"} />
 
-	<SignOutButton />
-</main>
+<SignOutButton />
 
 <style>
 	main {

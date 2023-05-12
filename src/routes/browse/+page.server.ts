@@ -7,7 +7,12 @@ export async function load({ locals }) {
         },
         take: 50,
         include: {
-            user: true
+            user: {
+                select: {
+                    name: true,
+                    avatar: true
+                }
+            }
         }
     });
     

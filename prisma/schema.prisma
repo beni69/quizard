@@ -7,11 +7,11 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model User {
+model AuthUser {
     // required by lucia
     id      String    @id @unique
-    session Session[]
-    Key     Key[]
+    auth_session AuthSession[]
+    auth_key     AuthKey[]
 
     // custom user attributes
     email     String   @unique
@@ -21,31 +21,33 @@ model User {
     updatedAt DateTime @updatedAt
 
     sets LearningSet[]
+
+    @@map("auth_user")
 }
 
-model Key {
+model AuthKey {
     id              String  @id @unique
     hashed_password String?
     user_id         String
-    primary         Boolean
+    primary_key         Boolean
     expires         BigInt?
 
-    user User @relation(references: [id], fields: [user_id], onDelete: Cascade)
+    auth_user AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
     @@index([user_id])
-    @@map("key")
+    @@map("auth_key")
 }
 
-model Session {
+model AuthSession {
     id             String @id @unique
     user_id        String
     active_expires BigInt
     idle_expires   BigInt
 
-    user User @relation(references: [id], fields: [user_id], onDelete: Cascade)
+    auth_user AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
     @@index([user_id])
-    @@map("session")
+    @@map("auth_session")
 }
 
 model LearningSet {
@@ -58,7 +60,7 @@ model LearningSet {
     cards Card[]
 
     userId String
-    user   User   @relation(fields: [userId], references: [id])
+    user   AuthUser   @relation(fields: [userId], references: [id])
 }
 
 model Card {
