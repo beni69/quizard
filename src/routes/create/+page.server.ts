@@ -9,7 +9,7 @@ export async function load({ locals }) {
     return {
         learningSets: db.learningSet.findMany({
             where: {
-                userId: session.userId
+                authorId: session.userId
             }
         })
     };
@@ -27,14 +27,16 @@ export const actions = {
         if (!session) throw error(401);
 
         const result = createSetSchema.safeParse(Object.fromEntries(await request.formData()));
-        if (!result.success) return fail<FieldErrors<z.infer<typeof createSetSchema>>>(400, { errors: result.error.flatten().fieldErrors });
+        if (!result.success) return fail(400, { errors: result.error.flatten().fieldErrors });
+
+        const { name, description, visibility } = result.data;
 
         const createdSet = await db.learningSet.create({
             data: {
-                name: result.data.name,
-                description: "",
-                visibility: result.data.visibility,
-                user: {
+                name,
+                description,
+                visibility,
+                author: {
                     connect: {
                         id: session.userId
                     }

@@ -10,13 +10,15 @@
 	export var data: PageData;
 
 	const { form, errors, enhance } = superForm(data.form, { taintedMessage: null, clearOnSubmit: "none", multipleSubmits: "prevent" });
+
+	var acceptTerms: boolean;
 </script>
 
 <svelte:head>
 	<title>Regisztráció - Quizard</title>
 </svelte:head>
 
-<div class="max-w-sm mx-auto">
+<div class="max-w-md mx-auto">
 	<form class="card px-4 py-6 rounded-3xl flex flex-col gap-4" method="post" use:enhance>
 		<h1 class="!text-3xl text-center mb-2">Regisztráció</h1>
 		<label for="email" class="label">
@@ -35,20 +37,20 @@
 			<span class="text-sm text-error-400">{$errors.email?.[0] ?? ""}</span>
 		</label>
 
-		<label for="name" class="label">
+		<label for="username" class="label">
 			<span class="ml-2">Felhasználónév</span>
 			<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
 				<div class="input-group-shim"><FasUser /></div>
 				<input
-					id="name"
-					class={$errors.name?.[0] ? "input-error" : ""}
+					id="username"
+					class={$errors.username?.[0] ? "input-error" : ""}
 					type="text"
-					name="name"
-					placeholder="John Pork"
-					bind:value={$form.name}
+					name="username"
+					placeholder="johnpork1337"
+					bind:value={$form.username}
 				/>
 			</div>
-			<span class="text-sm text-error-400">{$errors.name?.[0] ?? ""}</span>
+			<span class="text-sm text-error-400">{$errors.username?.[0] ?? ""}</span>
 		</label>
 
 		<label for="password" class="label">
@@ -67,7 +69,28 @@
 			<span class="text-sm text-error-400">{$errors.password?.[0] ?? ""}</span>
 		</label>
 
-		<button class="btn variant-filled-primary !text-white mt-4" type="submit">Küldés</button>
+		<label for="confirm-password" class="label">
+			<span class="ml-2">Jelszó újra</span>
+			<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+				<div class="input-group-shim"><FasKey /></div>
+				<input
+					id="confirm-password"
+					class={$errors.confirmPassword?.[0] ? "input-error" : ""}
+					type="password"
+					name="confirmPassword"
+					placeholder="•••••••••"
+					bind:value={$form.confirmPassword}
+				/>
+			</div>
+			<span class="text-sm text-error-400">{$errors.confirmPassword?.[0] ?? ""}</span>
+		</label>
+
+		<label class="flex items-center space-x-4 mt-4">
+			<input class="checkbox" type="checkbox" bind:checked={acceptTerms} />
+			<p class="!text-xs">Tudomásul vettem, hogy a regisztrációval eladom a lelkem a <a href="https://hu.wikipedia.org/wiki/S%C3%A1t%C3%A1n" rel="noreferrer" target="_blank">sátánnak</a>.</p>
+		</label>
+
+		<button class="btn variant-filled-primary !text-white" type="submit" disabled={!acceptTerms}>Küldés</button>
 	</form>
 
 	<ul class="mx-auto mt-4 text-sm list-nav card p-2">

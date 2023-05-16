@@ -1,5 +1,6 @@
 generator client {
     provider = "prisma-client-js"
+    previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -9,18 +10,23 @@ datasource db {
 
 model AuthUser {
     // required by lucia
-    id      String    @id @unique
+    id           String        @id @unique
     auth_session AuthSession[]
     auth_key     AuthKey[]
 
     // custom user attributes
-    email     String   @unique
-    name      String   @unique
-    avatar    String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    email       String   @unique
+    username    String   @unique
+    displayName String
+    avatar      String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 
-    sets LearningSet[]
+    likes    UserLikeOnLearningSet[]
+    bookmarks UserBookmarkOnLearningSet[]
+    reports  UserReportOnLearningSet[]
+
+    createdSets LearningSet[]
 
     @@map("auth_user")
 }
@@ -29,7 +35,7 @@ model AuthKey {
     id              String  @id @unique
     hashed_password String?
     user_id         String
-    primary_key         Boolean
+    primary_key     Boolean
     expires         BigInt?
 
     auth_user AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
@@ -51,16 +57,25 @@ model AuthSession {
 }
 
 model LearningSet {
-    id          String     @id @default(cuid())
-    
+    id String @id @default(cuid())
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    publishedAt DateTime?
+
     name        String
     description String
     visibility  Visibility
+    tags        String[]
+
+    likes       UserLikeOnLearningSet[]
+    bookmarks   UserBookmarkOnLearningSet[]
+    reports     UserReportOnLearningSet[]
 
     cards Card[]
 
-    userId String
-    user   AuthUser   @relation(fields: [userId], references: [id])
+    authorId String
+    author   AuthUser @relation(fields: [authorId], references: [id])
 }
 
 model Card {
@@ -77,4 +92,44 @@ enum Visibility {
     PUBLIC
     UNLISTED
     PRIVATE
+}
+
+// many to many relationship connectors
+model UserLikeOnLearningSet {
+    userId String
+    user   AuthUser @relation(fields: [userId], references: [id])
+
+    learningSetId String
+    learningSet   LearningSet @relation(fields: [learningSetId], references: [id])
+
+    @@id([userId, learningSetId])
+}
+
+model UserBookmarkOnLearningSet {
+    userId String
+    user   AuthUser @relation(fields: [userId], references: [id])
+
+    learningSetId String
+    learningSet   LearningSet @relation(fields: [learningSetId], references: [id])
+
+    @@id([userId, learningSetId])
+}
+
+model UserReportOnLearningSet {
+    createdAt DateTime @default(now())
+
+    inapropriate Boolean
+    privacy Boolean
+    spam Boolean
+    misleading Boolean
+    copyright Boolean
+    customReason String?
+
+    learningSetId String
+    learningSet   LearningSet @relation(fields: [learningSetId], references: [id])
+
+    reporterId String
+    reporter   AuthUser @relation(fields: [reporterId], references: [id])
+
+    @@id([learningSetId, reporterId])
 }

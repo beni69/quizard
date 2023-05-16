@@ -6,21 +6,14 @@
 </script>
 
 <h1>Profile</h1>
-<p>Username: {data.user.name}</p>
+<p>Username: {data.user.username}</p>
 <p>Email: {data.user.email}</p>
 <p>Registered at: {new Date(data.user.createdAt).toLocaleString()}</p>
-<img src={data.user.avatar} alt={data.user.name + " avatar"} />
+<img src={data.user.avatar} alt={data.user.username + " avatar"} />
 
 <SignOutButton />
 
 <style>
-	main {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		height: 100vh;
-	}
 	img {
 		width: 100px;
 		height: 100px;

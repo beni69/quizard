@@ -17,7 +17,7 @@
 	{/each}
 </ul>
 
-{#if data.userId === data.learningSet.userId}
+{#if data.userId === data.learningSet.authorId}
     Te vagy a szerző.
 	<a href="/create/{data.learningSet.id}">Tananyag szerkesztése</a>
 {/if}

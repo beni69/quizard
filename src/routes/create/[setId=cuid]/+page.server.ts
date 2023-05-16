@@ -9,7 +9,7 @@ export async function load({locals, params}) {
     const learningSet = await db.learningSet.findFirst({
         where: {
             id: params.setId,
-            userId: session.userId
+            authorId: session.userId
         },
         include: {
             cards: true
@@ -36,19 +36,21 @@ export const actions = {
         const learningSet = await db.learningSet.findFirst({
             where: {
                 id: params.setId,
-                userId: session.userId
+                authorId: session.userId
             }
         });
 
         if(!learningSet) throw error(404);
 
         const result = createCardSchema.safeParse(Object.fromEntries(await request.formData()));
-        if (!result.success) return fail<FieldErrors<z.infer<typeof createCardSchema>>>(400, { errors: result.error.flatten().fieldErrors });
+        if (!result.success) return fail(400, { errors: result.error.flatten().fieldErrors });
+
+        const {term, definition} = result.data;
 
         await db.card.create({
             data: {
-                term: result.data.term,
-                definition: result.data.definition,
+                term,
+                definition,
                 learningSet: {
                     connect: {
                         id: learningSet.id

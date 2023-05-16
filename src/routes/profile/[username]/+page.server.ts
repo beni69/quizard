@@ -4,11 +4,12 @@ import { error } from "@sveltejs/kit";
 export async function load({ params }) {
     const user = await db.authUser.findUnique({
         where: {
-            name: params.username
+            username: params.username
         },
         select: {
-            name: true,
-            sets: {
+            username: true,
+            displayName: true,
+            createdSets: {
                 where: {
                     visibility: "PUBLIC"
                 }

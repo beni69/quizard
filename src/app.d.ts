@@ -6,7 +6,8 @@ declare global {
 		type Auth = import("$lib/server/lucia").Auth;
 		type UserAttributes = {
 			email: string,
-			name: string,
+			username: string,
+			displayName: string,
 			avatar: string,
 			createdAt: Date,
 			updatedAt: Date

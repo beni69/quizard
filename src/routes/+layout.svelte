@@ -11,6 +11,7 @@
 	import FasPlus from "~icons/fa6-solid/plus";
 	import FasMagnifyingGlass from "~icons/fa6-solid/magnifying-glass";
 	import FasUser from "~icons/fa6-solid/user";
+	import FasBookmark from "~icons/fa6-solid/bookmark";
 	import { writable } from "svelte/store";
 	import SignOutButton from "$lib/components/SignOutButton.svelte";
 	import AppRailLink from "$lib/components/AppRailLink.svelte";
@@ -30,12 +31,18 @@
 				class="bg-center bg-contain bg-no-repeat rounded-2xl hover:bg-secondary-600"
 			/>
 		</div>
-		
+
 		<AppRailLink href="/browse" tooltip={{ name: "browse", text: "Böngészés", placement: "right" }}>
 			<FasMagnifyingGlass />
 		</AppRailLink>
 
 		{#if data.user}
+			<AppRailLink
+				href="/bookmarked"
+				tooltip={{ name: "bookmarked", text: "Mentett", placement: "right" }}
+			>
+				<FasBookmark />
+			</AppRailLink>
 			<AppRailLink href="/create" tooltip={{ name: "create", text: "Alkotás", placement: "right" }}>
 				<FasPlus />
 			</AppRailLink>
