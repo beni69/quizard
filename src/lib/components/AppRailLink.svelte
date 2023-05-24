@@ -21,7 +21,7 @@
 	>
 		<slot />
 	</a>
-	<div class="card variant-filled py-2 px-3" data-popup={tooltip.name}>
+	<div class="card variant-filled py-2 px-3 z-50" data-popup={tooltip.name}>
 		{tooltip.text}
 		<div class="arrow variant-filled" />
 	</div>

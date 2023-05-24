@@ -22,7 +22,7 @@ export async function load({ locals }) {
 export const actions = {
 	async default({ request, locals }) {
 		const session = await locals.auth.validate();
-		if (session) throw error(401);
+		if (session) throw error(403);
 
 		const form = await superValidate(request, registrationSchema);
 		if (!form.valid) return fail(400, { form });

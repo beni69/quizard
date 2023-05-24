@@ -8,8 +8,8 @@
 
 	import FasRightToBracket from "~icons/fa6-solid/right-to-bracket";
 	import FasRightFromBracket from "~icons/fa6-solid/right-from-bracket";
-	import FasPlus from "~icons/fa6-solid/plus";
-	import FasMagnifyingGlass from "~icons/fa6-solid/magnifying-glass";
+	import FasScrewdriverWrench from "~icons/fa6-solid/screwdriver-wrench";
+	import FasCompass from "~icons/fa6-solid/compass";
 	import FasUser from "~icons/fa6-solid/user";
 	import FasBookmark from "~icons/fa6-solid/bookmark";
 	import { writable } from "svelte/store";
@@ -32,8 +32,8 @@
 			/>
 		</div>
 
-		<AppRailLink href="/browse" tooltip={{ name: "browse", text: "Böngészés", placement: "right" }}>
-			<FasMagnifyingGlass />
+		<AppRailLink href="/browse" tooltip={{ name: "browse", text: "Felfedezés", placement: "right" }}>
+			<FasCompass />
 		</AppRailLink>
 
 		{#if data.user}
@@ -44,7 +44,7 @@
 				<FasBookmark />
 			</AppRailLink>
 			<AppRailLink href="/create" tooltip={{ name: "create", text: "Alkotás", placement: "right" }}>
-				<FasPlus />
+				<FasScrewdriverWrench />
 			</AppRailLink>
 		{/if}
 

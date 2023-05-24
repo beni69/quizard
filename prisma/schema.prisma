@@ -56,7 +56,7 @@ model AuthSession {
     @@map("auth_session")
 }
 
-model LearningSet {
+model LearningSet{
     id String @id @default(cuid())
 
     createdAt DateTime @default(now())
@@ -75,17 +75,17 @@ model LearningSet {
     cards Card[]
 
     authorId String
-    author   AuthUser @relation(fields: [authorId], references: [id])
+    author   AuthUser @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
 model Card {
-    id String @id @default(cuid())
+    id Int @id @default(sequence())
 
     term       String
     definition String
 
     learningSetId String
-    learningSet   LearningSet @relation(fields: [learningSetId], references: [id])
+    learningSet   LearningSet @relation(fields: [learningSetId], references: [id], onDelete: Cascade)
 }
 
 enum Visibility {
@@ -97,20 +97,24 @@ enum Visibility {
 // many to many relationship connectors
 model UserLikeOnLearningSet {
     userId String
-    user   AuthUser @relation(fields: [userId], references: [id])
+    user   AuthUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     learningSetId String
-    learningSet   LearningSet @relation(fields: [learningSetId], references: [id])
+    learningSet   LearningSet @relation(fields: [learningSetId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
 
     @@id([userId, learningSetId])
 }
 
 model UserBookmarkOnLearningSet {
     userId String
-    user   AuthUser @relation(fields: [userId], references: [id])
+    user   AuthUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     learningSetId String
-    learningSet   LearningSet @relation(fields: [learningSetId], references: [id])
+    learningSet   LearningSet @relation(fields: [learningSetId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
 
     @@id([userId, learningSetId])
 }
@@ -126,10 +130,10 @@ model UserReportOnLearningSet {
     customReason String?
 
     learningSetId String
-    learningSet   LearningSet @relation(fields: [learningSetId], references: [id])
+    learningSet   LearningSet @relation(fields: [learningSetId], references: [id], onDelete: Cascade)
 
     reporterId String
-    reporter   AuthUser @relation(fields: [reporterId], references: [id])
+    reporter   AuthUser @relation(fields: [reporterId], references: [id], onDelete: Cascade)
 
     @@id([learningSetId, reporterId])
 }

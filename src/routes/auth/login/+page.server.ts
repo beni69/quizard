@@ -8,7 +8,7 @@ const loginSchema = z.object({
 	password: z.string().min(8, "A jelszó legalább 8 karakter hosszú kell legyen!"),
 });
 
-export async function load({ locals }) {
+export async function load({locals}) {
 	const session = await locals.auth.validate();
 	if (session) throw redirect(302, "/profile");
 

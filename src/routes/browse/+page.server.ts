@@ -1,7 +1,8 @@
 import db from "$lib/server/db";
+import Pagination from "$lib/server/pagintation.js";
 import z from "zod";
 
-const pageSize = 20;
+const pagination = new Pagination(20);
 
 const searchParamsSchema = z.object({
     page: z.preprocess(Number, z.number().int().nonnegative().default(0).catch(0)),
@@ -13,9 +14,9 @@ const searchParamsSchema = z.object({
 export async function load({ url }) {
     const { page, sortBy, sortDirection, query } = searchParamsSchema.parse(Object.fromEntries(url.searchParams.entries())) as { page: number, sortBy: "name" | "score" | "publishedAt", sortDirection: "asc" | "desc", query?: string }; // fsr zod doesn't infer that query is optional
 
-    const [count, records] = await Promise.all([
+    const [totalCount, {matchedRecords, matchCount, currentPage, pageCount}] = await Promise.all([
         db.learningSet.count(),
-        db.learningSet.findMany({
+        pagination.safeQuery(db.learningSet.findMany({
             where: {
                 AND: [
                     {
@@ -69,18 +70,16 @@ export async function load({ url }) {
                     }
                 }
             }
-        })
+        }), page)
     ]);
-
-    let currentPage = page;
-    if (page * pageSize > count) currentPage = 0
-
+    
     return {
         currentPage,
-        totalCount: count,
+        pageCount,
+        totalCount,
         matches: {
-            count: records.length,
-            records: records.slice(currentPage * pageSize, (currentPage + 1) * pageSize)
+            count: matchCount,
+            records: matchedRecords
         }
     };
 }

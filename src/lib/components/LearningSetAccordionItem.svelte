@@ -10,6 +10,7 @@
 	import FasHeart from "~icons/fa6-solid/heart";
 	import FasBookmark from "~icons/fa6-solid/bookmark";
 	import FasCircleCheck from "~icons/fa6-solid/circle-check";
+	import LearningSetAccordionItemSummary from "./LearningSetAccordionItemSummary.svelte";
 
 	export var id: string;
 	export var name: string;
@@ -28,23 +29,35 @@
 
 	var reportModalOpen: boolean = false;
 
+	$: indexInLikes = likes.findIndex((like) => like.userId === user?.id);
 	const likeForm = {
 		submitting: false,
 		async submit() {
 			likeForm.submitting = true;
 			return () => {
-				invalidateAll();
+				// after receiving the response from the form submission, we toggle the liked state on the client based on what it was previously
+				// this way we don't have to do invalidateAll() and refetch the whole page
+				if (indexInLikes === -1) likes = [...likes, { userId: user?.id ?? "" }];
+				else likes = [...likes.slice(0, indexInLikes), ...likes.slice(indexInLikes + 1)];
 				likeForm.submitting = false;
 			};
 		},
 	};
 
+	$: indexInBookmarks = bookmarks.findIndex((bookmark) => bookmark.userId === user?.id);
 	const bookmarkForm = {
 		submitting: false,
 		async submit() {
 			bookmarkForm.submitting = true;
 			return () => {
-				invalidateAll();
+				// after receiving the response from the form submission, we toggle the bookmarked state on the client based on what it was previously
+				// this way we don't have to do invalidateAll() and refetch the whole page
+				if (indexInBookmarks === -1) bookmarks = [...bookmarks, { userId: user?.id ?? "" }];
+				else
+					bookmarks = [
+						...bookmarks.slice(0, indexInBookmarks),
+						...bookmarks.slice(indexInBookmarks + 1),
+					];
 				bookmarkForm.submitting = false;
 			};
 		},
@@ -52,22 +65,7 @@
 </script>
 
 <AccordionItem>
-	<div class="grid grid-cols-5 gap-2 w-full" slot="summary">
-		<span class="font-semibold">{name}</span>
-		<span class="font-normal">{likes.length}</span>
-		<div class="flex items-center gap-1 overflow-auto hide-scrollbar mr-4 rounded-full">
-			{#each tags as tag}
-				<span class="badge variant-filled">{tag}</span>
-			{:else}
-				<span class="italic text-surface-400">(nincs)</span>
-			{/each}
-		</div>
-		<span class="text-surface-400">{publishedAt?.toLocaleDateString()}</span>
-		<div class="flex items-center gap-2">
-			<Avatar src={author.avatar} width="w-8" />
-			<span>{author.displayName}</span>
-		</div>
-	</div>
+	<LearningSetAccordionItemSummary {id} {author} {likes} {name} {publishedAt} {tags} slot="summary"/>
 	<div class="card p-4 flex flex-col gap-4 mx-auto" slot="content">
 		<div class="grid grid-cols-[5fr_1fr] gap-8">
 			<div class="flex flex-col gap-2">
@@ -104,7 +102,7 @@
 						width="w-24"
 						class="ring-2"
 					/>
-					<span class="text-lg">{author.displayName}</span>
+					<span class="text-lg text-center">{author.displayName}</span>
 				</a>
 			</div>
 		</div>
@@ -116,25 +114,28 @@
 				{#if user && author.id !== user.id}
 					<form action="/set/{id}?/toggleLike" method="post" use:enhance={likeForm.submit}>
 						<button
-							class="btn btn-icon {likes.findIndex(like => like.userId === user?.id) != -1
-								? 'active'
-								: 'inactive'} !bg-rose-400 !ring-rose-400"
+							class="btn btn-icon {indexInLikes === -1
+								? 'variant-ghost !bg-opacity-20'
+								: ''} !bg-rose-400 !ring-rose-400"
 							disabled={likeForm.submitting}
 						>
 							<FasHeart />
 						</button>
 					</form>
 					<form action="/set/{id}?/toggleBookmark" method="post" use:enhance={bookmarkForm.submit}>
-						<button class="btn btn-icon {bookmarks.findIndex(bookmark => bookmark.userId === user?.id) != -1
-							? 'active'
-							: 'inactive'} !bg-blue-600 !ring-blue-600" disabled={bookmarkForm.submitting}>
+						<button
+							class="btn btn-icon {indexInBookmarks === -1
+								? 'variant-ghost !bg-opacity-20'
+								: ''} !bg-blue-600 !ring-blue-600"
+							disabled={bookmarkForm.submitting}
+						>
 							<FasBookmark />
 						</button>
 					</form>
 				{/if}
 				<!-- <button class="btn btn-icon variant-filled !bg-blue-600 !text-white"><FasBookmark/></button> -->
 				<button
-					class="btn btn-icon active !bg-emerald-500 !ring-emerald-500"
+					class="btn btn-icon !bg-emerald-500 !ring-emerald-500"
 					on:click={() => navigator.clipboard.writeText(`${$page.url.origin}/set/${id}?share`)}
 					use:popup={{ event: "click", target: `copiedMessage-${id}`, placement: "top" }}
 				>
@@ -143,7 +144,7 @@
 				<div class="card variant-filled-surface py-2 px-3" data-popup="copiedMessage-{id}">
 					<div class="flex items-center gap-2 font-semibold text-sm">
 						<FasCircleCheck
-							class="text-success-600 bg-[radial-gradient(circle,rgba(255,255,255,1)50%,rgba(255,255,255,0)50%);]"
+							class="text-success-600 bg-[radial-gradient(circle,rgba(255,255,255,1)50%,rgba(255,255,255,0)50%)]"
 						/>
 						Vágólapra másolva!
 					</div>
@@ -151,7 +152,7 @@
 				</div>
 				{#if user && author.id !== user.id}
 					<button
-						class="btn btn-icon active !bg-warning-500 !ring-warning-500"
+						class="btn btn-icon !bg-warning-500 !ring-warning-500"
 						on:click={() => (reportModalOpen = true)}
 					>
 						<FasFlag />
@@ -164,13 +165,3 @@
 {#if reportModalOpen}
 	<ReportModal {id} bind:open={reportModalOpen} />
 {/if}
-
-<style lang="postcss">
-	button.btn.inactive {
-		@apply variant-ghost !bg-opacity-20;
-	}
-
-	button.btn.active {
-		@apply variant-filled-primary;
-	}
-</style>
