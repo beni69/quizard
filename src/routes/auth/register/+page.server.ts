@@ -13,7 +13,7 @@ const registrationSchema = z.object({
 
 export async function load({ locals }) {
 	const session = await locals.auth.validate();
-	if (session) throw redirect(302, "/profile");
+	if (session) throw error(403);
 
 	const form = await superValidate(registrationSchema);
 	return { form };

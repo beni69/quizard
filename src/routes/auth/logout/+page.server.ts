@@ -1,6 +1,10 @@
 import { error, redirect } from "@sveltejs/kit";
 import auth from "$lib/server/auth";
 
+export async function load() {
+	throw error(405);
+}
+
 export const actions = {
 	async default ({ locals }) {
 		const session = await locals.auth.validate();

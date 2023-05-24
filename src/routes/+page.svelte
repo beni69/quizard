@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { fly } from "svelte/transition";
-    import FasCompass from "~icons/fa6-solid/compass";
-    import FasScrewdriverWrench from "~icons/fa6-solid/screwdriver-wrench";
+	import { fade, fly } from "svelte/transition";
+	import FasCompass from "~icons/fa6-solid/compass";
+	import FasScrewdriverWrench from "~icons/fa6-solid/screwdriver-wrench";
 
 	let mounted = false;
 	onMount(() => (mounted = true));
@@ -31,40 +31,48 @@
 			{/if}
 		</div>
 	</div>
-    <section class="flex items-center justify-center gap-16 2xl:landscape:!gap-96 flex-wrap bg-black bg-opacity-20 p-16">
-        <div class="w-96 flex flex-col gap-4 text-center md:!text-left">
-            <h2 class="font-semibold">Tanulj és Taníts</h2>
-            <p class="!text-lg">
-                Böngéssz a mások által alkotott tananyagok között, vagy jelentkezz be és tégy közzé sajátot, hogy megoszd a tudásod a világgal.
-            </p>
-        </div>
-        <div class="text-xs sm:!text-base">
-            <ul class="mx-auto list-nav border-y border-surface-600 py-4">
-                <li>
-                    <a href="/browse">
-                        <div class="badge-icon w-8 h-8 variant-soft-primary">
-                            <FasCompass />
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="font-semibold">Felfedezés</span>
-                            <span class="text-surface-400">Böngéssz és keresd meg a neked megfelelő tananyagot!</span>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="/create?redirectToLoginIfUnauthorized" class="flex items-center justify-start">
-                        <div class="badge-icon w-8 h-8 variant-soft-primary">
-                            <FasScrewdriverWrench />
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="font-semibold">Alkotás</span>
-                            <span class="text-surface-400">Tégy közzé saját tananyagot!</span>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </section>
+	{#if mounted}
+		<section
+			class="flex items-center justify-center gap-16 2xl:landscape:!gap-96 flex-wrap bg-black bg-opacity-20 p-16"
+			in:fade={{ duration: 250 }}
+		>
+			<div class="w-96 flex flex-col gap-4 text-center md:!text-left">
+				<h2 class="font-semibold">Tanulj és Taníts</h2>
+				<p class="!text-lg">
+					Böngéssz a mások által alkotott tananyagok között, vagy jelentkezz be és tégy közzé
+					sajátot, hogy megoszd a tudásod a világgal.
+				</p>
+			</div>
+			<div class="text-xs sm:!text-base">
+				<ul class="mx-auto list-nav border-y border-surface-600 py-4">
+					<li>
+						<a href="/browse">
+							<div class="badge-icon w-8 h-8 variant-soft-primary">
+								<FasCompass />
+							</div>
+							<div class="flex flex-col">
+								<span class="font-semibold">Felfedezés</span>
+								<span class="text-surface-400"
+									>Böngéssz és keresd meg a neked megfelelő tananyagot!</span
+								>
+							</div>
+						</a>
+					</li>
+					<li>
+						<a href="/create?redirectToLoginIfUnauthorized" class="flex items-center justify-start">
+							<div class="badge-icon w-8 h-8 variant-soft-primary">
+								<FasScrewdriverWrench />
+							</div>
+							<div class="flex flex-col">
+								<span class="font-semibold">Alkotás</span>
+								<span class="text-surface-400">Tégy közzé saját tananyagot!</span>
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</section>
+	{/if}
 </div>
 
 <style lang="postcss">
