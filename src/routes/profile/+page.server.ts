@@ -13,7 +13,8 @@ export async function load({ locals }) {
                 authorId: session.userId,
                 publishedAt: {
                     not: null
-                }
+                },
+                visibility: "PUBLIC"
             }
         }),
         receivedLikeCount: db.userLikeOnLearningSet.count({

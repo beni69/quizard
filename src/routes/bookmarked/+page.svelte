@@ -46,7 +46,7 @@
 	</div>
 	<div class="flex items-center justify-between w-full border-surface-500 border-t-2 py-2">
 		<span class="text-sm text-surface-400">
-			Összesen {data.totalCount} tananyag található
+			Összesen {data.totalCount} darab tananyag található
 		</span>
 		<PaginationControl
 			pageCount={data.pageCount}

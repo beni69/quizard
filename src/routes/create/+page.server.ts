@@ -2,9 +2,11 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import db from "$lib/server/db";
 import z from "zod";
 
-export async function load({ locals }) {
+export async function load({ locals, url }) {
     const session = await locals.auth.validate();
-    if (!session) throw error(401);
+    if (!session)
+        if (url.searchParams.get("redirectToLoginIfUnauthorized") != null) throw redirect(302, "/auth/login");
+        else throw error(401);
 
     return {
         learningSets: db.learningSet.findMany({

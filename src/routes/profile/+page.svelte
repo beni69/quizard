@@ -36,7 +36,7 @@
 		<div class="flex items-center gap-12 -mb-9 justify-center px-4">
 			<Avatar src={data.user.avatar} width="w-32" class="ring-2 ring-surface-500 z-10" />
 			<form
-				class="flex items-center gap-2"
+				class="flex items-center gap-2 mb-3"
 				action="?/updateDisplayName"
 				method="post"
 				use:enhance={submitDisplayNameChange}
@@ -72,7 +72,7 @@
 		</div>
 		<hr class="border-2 border-surface-500 w-full" />
 	</div>
-	<div class="w-1/2 flex flex-col items-center gap-8">
+	<div class="w-1/2 flex flex-col items-center gap-16">
 		<UserStatsCard username={data.user.username} publishedSetCount={data.publishedSetCount} receivedLikeCount={data.receivedLikeCount} registrationDate={data.user.createdAt}/>
 		<div class="flex flex-col gap-4 w-3/4">
 			<h2>Közzétett tananyagok</h2>

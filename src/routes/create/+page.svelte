@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-    <title>Alkotás</title>
+    <title>Alkotás- Quizard</title>
 </svelte:head>
 
 <h1>Alkotás</h1>

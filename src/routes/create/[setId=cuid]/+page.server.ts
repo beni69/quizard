@@ -2,7 +2,7 @@ import { error, fail } from "@sveltejs/kit";
 import db from "$lib/server/db";
 import z from "zod";
 
-export async function load({locals, params}) {
+export async function load({ locals, params }) {
     const session = await locals.auth.validate();
     if (!session) throw error(401);
 
@@ -16,7 +16,7 @@ export async function load({locals, params}) {
         }
     });
 
-    if(!learningSet) throw error(404);
+    if (!learningSet) throw error(404);
 
     return {
         cards: learningSet.cards
@@ -29,7 +29,7 @@ const createCardSchema = z.object({
 });
 
 export const actions = {
-    async createCard({locals, params, request}) {
+    async createCard({ locals, params, request }) {
         const session = await locals.auth.validate();
         if (!session) throw error(401);
 
@@ -40,12 +40,12 @@ export const actions = {
             }
         });
 
-        if(!learningSet) throw error(404);
+        if (!learningSet) throw error(404);
 
         const result = createCardSchema.safeParse(Object.fromEntries(await request.formData()));
         if (!result.success) return fail(400, { errors: result.error.flatten().fieldErrors });
 
-        const {term, definition} = result.data;
+        const { term, definition } = result.data;
 
         await db.card.create({
             data: {

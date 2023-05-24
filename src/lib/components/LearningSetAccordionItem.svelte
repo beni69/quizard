@@ -2,7 +2,6 @@
 	import { AccordionItem, Avatar, popup } from "@skeletonlabs/skeleton";
 	import { page } from "$app/stores";
 	import { enhance } from "$app/forms";
-	import { invalidateAll } from "$app/navigation";
 	import ReportModal from "./ReportModal.svelte";
 	import FasFlag from "~icons/fa6-solid/flag";
 	import FasArrowRight from "~icons/fa6-solid/arrow-right";
