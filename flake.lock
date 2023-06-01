@@ -17,6 +17,29 @@
         "type": "indirect"
       }
     },
+    "nix-prez": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1677664954,
+        "narHash": "sha256-vtbNl2iiL6h+YY1dqZ7eeyXwedLO+BK7t2R3bROVLog=",
+        "owner": "beni69",
+        "repo": "kareszklub-nix",
+        "rev": "28584aa9bc1f447c3fe56295334e7bd285c05beb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "beni69",
+        "repo": "kareszklub-nix",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1684935479,
@@ -36,6 +59,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+        "nix-prez": "nix-prez",
         "nixpkgs": "nixpkgs"
       }
     },
