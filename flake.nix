@@ -19,6 +19,9 @@
           export PRISMA_FMT_BINARY="${prisma-engines}/bin/prisma-fmt"
         '';
       };
+      devShells.prez = with import nixpkgs { inherit system; }; mkShell {
+        buildInputs = [ pandoc watchexec nodePackages.live-server ];
+      };
     }
     ((nixpkgs.legacyPackages.${system}.callPackage nix-prez.lib { }).mkFlake {
       src = ./prez;
