@@ -2,7 +2,7 @@
 
 ## <!-- new slide without title -->
 
-![Egy modern felhasználóbarát online oktatóprogram](logo.png)
+![Egy modern felhasználóbarát online oktatóprogram](img/logo.png)
 
 ## Funkciók
 
@@ -46,12 +46,26 @@ vagy csak szeret új dolgokat tanulni.
 
 ## Egyéb
 
-- Futtatás: Vercel <img style="height:1em; margin:0 5px" src="vercel-icon.svg">
+- Futtatás: Vercel <img style="height:1em; margin:0 5px" src="img/vercel-icon.svg">
 - Kód megosztása: GitHub <img style="height:1em; margin:0 5px" src="https://upload.wikimedia.org/wikipedia/commons/2/24/Github_logo_svg.svg">
 
 # Bővebben a funkciókról
+
 ##
-<!-- ... -->
+![Fiókok](img/profile.png)
+
+##
+![Tananyag megtekintése](img/set.png)
+
+##
+![Tananyag szerkesztése](img/edit.png)
+
+##
+![Kvíz](img/quiz.png)
+
+##
+![Tanulókártyák](img/flashcards.png)
+
 
 # Fejlesztés közbeni problémák
 ##
