@@ -66,17 +66,30 @@ vagy csak szeret új dolgokat tanulni.
 ![Tanulókártyák](img/flashcards.png)
 
 
-# Fejlesztés közbeni problémák
-##
-<!-- ... -->
+# Munkamenet
+
+## Fejlesztés közbeni problémák
+
+- Meglehetősen új, kevésbé stabil eszközök használata
 
 ## Továbbfejlesztési ötletek
 
 - Tananyag automatikus importálása (pl. quizlet)
+- Több tanulási forma
+    - Játékok
+    - Végén értékelt "dolgozat"
+- Nyomtatható dolgozat megoldókulcssal
+
+##
+*Nem tervezzük abbahagyni a projektet, simán lehet, hogy a nyáron ezek közül megcsinálunk párat*
 
 
-# demo
+# [Demo](https://quizard.vbeni.dev){target=_blank}
 
-## q&a
+## Demo
+[![qr code](img/qr.svg)](https://quizard.vbeni.dev){target=_blank}
 
-## Köszönjük a figyelmet :)
+## ⁉️
+
+# Köszönjük a figyelmet :)
+##
