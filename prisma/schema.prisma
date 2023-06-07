@@ -1,5 +1,5 @@
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
     previewFeatures = ["fullTextSearch"]
 }
 
@@ -22,9 +22,9 @@ model AuthUser {
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 
-    likes    UserLikeOnLearningSet[]
+    likes     UserLikeOnLearningSet[]
     bookmarks UserBookmarkOnLearningSet[]
-    reports  UserReportOnLearningSet[]
+    reports   UserReportOnLearningSet[]
 
     createdSets LearningSet[]
 
@@ -56,11 +56,11 @@ model AuthSession {
     @@map("auth_session")
 }
 
-model LearningSet{
+model LearningSet {
     id String @id @default(cuid())
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
     publishedAt DateTime?
 
     name        String
@@ -68,9 +68,9 @@ model LearningSet{
     visibility  Visibility
     tags        String[]
 
-    likes       UserLikeOnLearningSet[]
-    bookmarks   UserBookmarkOnLearningSet[]
-    reports     UserReportOnLearningSet[]
+    likes     UserLikeOnLearningSet[]
+    bookmarks UserBookmarkOnLearningSet[]
+    reports   UserReportOnLearningSet[]
 
     cards Card[]
 
@@ -91,7 +91,7 @@ model Card {
 enum Visibility {
     PUBLIC
     UNLISTED
-    PRIVATE
+    UNPUBLISHED
 }
 
 // many to many relationship connectors
@@ -123,10 +123,10 @@ model UserReportOnLearningSet {
     createdAt DateTime @default(now())
 
     inapropriate Boolean
-    privacy Boolean
-    spam Boolean
-    misleading Boolean
-    copyright Boolean
+    privacy      Boolean
+    spam         Boolean
+    misleading   Boolean
+    copyright    Boolean
     customReason String?
 
     learningSetId String

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
 	import { page, navigating } from "$app/stores";
-	import { goto } from "$app/navigation";
+	import { goto, afterNavigate } from "$app/navigation";
 	import { Accordion } from "@skeletonlabs/skeleton";
 	import LearningSetAccordionItem from "$lib/components/LearningSetAccordionItem.svelte";
 	import FasMagnifyingGlass from "~icons/fa6-solid/magnifying-glass";
@@ -36,6 +36,9 @@
 		sortDirection = direction;
 		sortBy = by;
 	}
+
+	var flipflop = false;
+	afterNavigate(() => (flipflop = !flipflop));
 </script>
 
 <svelte:head>
@@ -52,7 +55,9 @@
 			</div>
 		</form>
 	</div>
-	<header class="grid grid-cols-5 gap-2 font-bold w-full pl-4 pr-11 py-1 bg-surface-800 -mb-6 rounded-md">
+	<header
+		class="grid grid-cols-5 gap-2 font-bold w-full pl-4 pr-11 py-1 bg-surface-800 -mb-6 rounded-md"
+	>
 		<button
 			on:click={() => sort("name")}
 			disabled={$navigating != null}
@@ -92,11 +97,13 @@
 		</button>
 		<span>Szerző</span>
 	</header>
-	<Accordion class="w-full" autocollapse>
-		{#each data.matches.records as learningSet}
-			<LearningSetAccordionItem {...learningSet} user={data.user} />
-		{/each}
-	</Accordion>
+	{#key flipflop}
+		<Accordion class="w-full" autocollapse>
+			{#each data.matches.records as learningSet}
+				<LearningSetAccordionItem {...learningSet} user={data.user} />
+			{/each}
+		</Accordion>
+	{/key}
 	<div class="flex items-center justify-between w-full border-surface-500 border-t-2 py-2">
 		<span class="text-sm text-surface-400">
 			A keresésnek megfelel {data.matches.count} darab a(z) {data.totalCount} tananyag közül

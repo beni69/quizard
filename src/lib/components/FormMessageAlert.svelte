@@ -12,12 +12,12 @@
 {#if !messageDismissed}
 	<div
 		{...$$restProps}
-		class="alert variant-filled-error {$$restProps.class}"
+		class="alert variant-filled-error !flex !flex-row !items-center !flex-nowrap {$$restProps.class}"
 		transition:scale={{ duration: 100, easing: expoInOut }}
 	>
 		<FasTriangleExclamation />
-		<p class="alert-message">{message}</p>
-		<div class="alert-actions">
+		<p class="alert-message !ml-4 !mt-0 unstyled">{message}</p>
+		<div class="alert-actions !mt-0">
 			<button class="btn-icon w-6 text-xs variant-soft" on:click={() => (messageDismissed = true)}
 				><FasXMark /></button
 			>

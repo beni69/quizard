@@ -19,7 +19,10 @@ export async function load({ locals, params, url }) {
             displayName: true,
             createdSets: {
                 where: {
-                    visibility: "PUBLIC"
+                    visibility: "PUBLIC",
+                    publishedAt: {
+                        not: null
+                    }
                 },
                 orderBy: {
                     publishedAt: "desc"

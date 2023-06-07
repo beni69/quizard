@@ -2,21 +2,16 @@
 	import type { PageData } from "./$types";
 	import { page } from "$app/stores";
 	import { enhance } from "$app/forms";
+	import PageContentContainer from "$lib/components/PageContentContainer.svelte";
+	import PageHeading from "$lib/components/PageHeading.svelte";
 
 	export var data: PageData;
 </script>
 
-<h1>Szerkesztő</h1>
-<h2>ID: {$page.params.setId}</h2>
+<PageContentContainer class="gap-8">
+	<PageHeading>Szerkesztés</PageHeading>
+</PageContentContainer>
 
-<ul>
-	{#each data.cards as { term, definition }}
-		<li>
-			<div>{term}</div>
-			<div>{definition}</div>
-		</li>
-	{/each}
-</ul>
 
 <form action="?/createCard" method="post" use:enhance>
 	<label for="term">Fogalom:</label>

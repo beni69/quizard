@@ -8,6 +8,12 @@
 	export var receivedLikeCount: number;
 	export var publishedSetCount: number;
 	export var registrationDate: Date;
+
+	const dateFormatter = new Intl.DateTimeFormat("hu-HU", {
+		year: "numeric",
+		month: "numeric",
+		day: "numeric",
+	});
 </script>
 
 <div {...$$restProps} class="card flex flex-col items-start p-4 {$$restProps.class}">
@@ -37,8 +43,8 @@
 			<FasCalendarPlus class="text-surface-400" />
 			<span class="font-semibold text-lg ml-2"> Csatlakozás dátuma: </span>
 		</div>
-		<span class="font-semibold text-lg ml-2 text-surface-400"
-			>{registrationDate.toLocaleDateString()}</span
+		<span class="font-semibold text-lg ml-2 text-surface-400 whitespace-nowrap"
+			>{dateFormatter.format(registrationDate)}</span
 		>
 	</div>
 </div>

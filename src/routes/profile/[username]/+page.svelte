@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { Accordion, Avatar } from "@skeletonlabs/skeleton";
 	import type { PageData } from "./$types";
+	import FasQuestion from "~icons/fa6-solid/question";
 	import PageContentContainer from "$lib/components/PageContentContainer.svelte";
 	import UserStatsCard from "$lib/components/UserStatsCard.svelte";
 	import LearningSetAccordionItem from "$lib/components/LearningSetAccordionItem.svelte";
 	import PaginationControl from "$lib/components/PaginationControl.svelte";
-	import {page} from "$app/stores";
-	import {goto} from "$app/navigation";
+	import { page } from "$app/stores";
+	import { goto } from "$app/navigation";
 
 	export var data: PageData;
 
@@ -51,6 +52,12 @@
 				<Accordion autocollapse>
 					{#each data.createdSets.matchedRecords as learningSet}
 						<LearningSetAccordionItem {...learningSet} author={data.profileUser} user={data.user} />
+					{:else}
+						<div
+							class="flex items-center text-xl font-semibold gap-4 justify-center py-8 text-surface-400"
+						>
+							<FasQuestion class="text-4xl" /> A felhasználó még nem tett közzé tananyagot
+						</div>
 					{/each}
 				</Accordion>
 				<div class="flex items-center justify-between w-full border-surface-500 border-t-2 py-2">

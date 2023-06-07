@@ -12,15 +12,27 @@ export async function load({ locals, url }) {
         learningSets: db.learningSet.findMany({
             where: {
                 authorId: session.userId
+            },
+            include: {
+                author: {
+                    select: {
+                        displayName: true,
+                        avatar: true
+                    }
+                },
+                likes: {
+                    select: {
+                        userId: true
+                    }
+                }
             }
         })
     };
 }
 
 const createSetSchema = z.object({
-    name: z.string().min(1, "A tananyag nevet meg kell adni!").max(50, "A tananyag neve maximum 50 karakter lehet!"),
-    description: z.string().max(1000, "A tananyag leírása maximum 1000 karakter lehet!"),
-    visibility: z.enum(["public", "private", "unlisted"]).transform(visibility => visibility.toUpperCase() as "PUBLIC" | "PRIVATE" | "UNLISTED"),
+    name: z.string().min(4, "A tananyag neve túl rövid!").max(24, "A tananyag neve maximum 24 karakter lehet!"),
+    description: z.string().max(500, "A tananyag leírása maximum 500 karakter lehet!")
 });
 
 export const actions = {
@@ -31,13 +43,22 @@ export const actions = {
         const result = createSetSchema.safeParse(Object.fromEntries(await request.formData()));
         if (!result.success) return fail(400, { errors: result.error.flatten().fieldErrors });
 
-        const { name, description, visibility } = result.data;
+        const { name, description } = result.data;
+
+        const workingOnCount = await db.learningSet.count({
+            where: {
+                authorId: session.userId,
+                publishedAt: null
+            }
+        });
+
+        if (workingOnCount >= 5) throw error(403, "Egyszerre legfeljebb 5 tananyagon dolgozhatsz! Továbbiakat csak akkor hozhatsz létre, ha valamelyiket közzéteszed, vagy törlöd.");
 
         const createdSet = await db.learningSet.create({
             data: {
                 name,
                 description,
-                visibility,
+                visibility: "UNPUBLISHED",
                 author: {
                     connect: {
                         id: session.userId

@@ -6,10 +6,15 @@
 	import FasKey from "~icons/fa6-solid/key";
 	import FasRightToBracket from "~icons/fa6-solid/right-to-bracket";
 	import FasRotate from "~icons/fa6-solid/rotate";
+	import FasCircleNotch from "~icons/fa6-solid/circle-notch";
 
 	export var data: PageData;
 
-	const { form, errors, enhance } = superForm(data.form, { taintedMessage: null, clearOnSubmit: "none", multipleSubmits: "prevent" });
+	const { form, errors, enhance, submitting } = superForm(data.form, {
+		taintedMessage: null,
+		clearOnSubmit: "none",
+		multipleSubmits: "prevent",
+	});
 
 	var acceptTerms: boolean;
 </script>
@@ -87,10 +92,21 @@
 
 		<label class="flex items-center space-x-4 mt-4">
 			<input class="checkbox" type="checkbox" bind:checked={acceptTerms} />
-			<p class="!text-xs">Tudomásul vettem, hogy a regisztrációval eladom a lelkem a <a href="https://hu.wikipedia.org/wiki/S%C3%A1t%C3%A1n" rel="noreferrer" target="_blank">sátánnak</a>.</p>
+			<p class="!text-xs">
+				Tudomásul vettem, hogy a regisztrációval eladom a lelkem a <a
+					href="https://hu.wikipedia.org/wiki/S%C3%A1t%C3%A1n"
+					rel="noreferrer"
+					target="_blank">sátánnak</a
+				>.
+			</p>
 		</label>
 
-		<button class="btn variant-filled-primary !text-white" type="submit" disabled={!acceptTerms}>Küldés</button>
+		<button class="btn variant-filled-primary !text-white gap-2" type="submit" disabled={!acceptTerms || $submitting}>
+			{#if $submitting}
+				<FasCircleNotch class="animate-spin" />
+			{/if}
+			Küldés
+		</button>
 	</form>
 
 	<ul class="mx-auto mt-4 text-sm list-nav card p-2">

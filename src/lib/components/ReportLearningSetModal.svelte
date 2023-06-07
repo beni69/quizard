@@ -1,29 +1,35 @@
 <script lang="ts">
 	import { enhance, type SubmitFunction } from "$app/forms";
 	import { fade, fly } from "svelte/transition";
+	import FasCircleNotch from "~icons/fa6-solid/circle-notch";
 
 	export var id: string;
 	export var open: boolean = true;
 
 	var otherChecked: boolean = false;
+	var isSubmitting: boolean = false;
 
 	var fieldErrors: Record<string, string[]> | null = null;
 	$: firstError = Object.values(fieldErrors ?? {}).map((errors) => (errors as string[])[0])[0];
 	const submit: SubmitFunction =
-		() =>
-		({ result }) => {
-			if (result.type === "failure")
-				fieldErrors = result.data?.errors ?? { message: "valami nem jo gec" };
-			else open = false;
+		() => {
+			isSubmitting = true;
+			return ({ result }) => {
+				if (result.type === "failure")
+					fieldErrors = result.data?.errors ?? { message: "💀💀💀" };
+				else open = false;
+				isSubmitting = false;
+			};
+
 		};
 </script>
 
 <div
-	class="absolute top-0 left-0 w-screen h-screen bg-black bg-opacity-10 flex items-center justify-center pb-32"
+	class="absolute top-0 left-0 w-screen h-screen bg-black bg-opacity-10 flex items-center justify-center pb-32 z-50"
 	transition:fade={{ duration: 150 }}
 >
 	<div
-		class="modal-example-form card py-6 px-6 w-modal shadow-xl space-y-4"
+		class="modal-example-form card p-6 w-modal shadow-xl space-y-4"
 		transition:fly={{ duration: 150, y: 150, opacity: 0 }}
 	>
 		<header class="text-2xl font-bold">Tananyag bejelentése</header>
@@ -92,9 +98,15 @@
 					<p class="text-error-500 w-full">{firstError}</p>
 				{/if}
 				<button class="btn variant-ringed" type="button" on:click={() => (open = false)}
+					disabled={isSubmitting}
 					>Mégsem</button
 				>
-				<button class="btn variant-filled-warning" type="submit">Küldés</button>
+				<button class="btn variant-filled-warning gap-2" type="submit" disabled={isSubmitting}>
+					{#if isSubmitting}
+						<FasCircleNotch class="text-sm animate-spin" />
+					{/if}
+					Küldés
+				</button>
 			</footer>
 		</form>
 	</div>

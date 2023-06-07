@@ -60,7 +60,7 @@
 						border="border-4 border-surface-300-600-token hover:!border-primary-500 transition"
 						cursor="cursor-pointer"
 					/>
-					<div class="card variant-filled-surface items-stretch isolate" data-popup="avatar">
+					<div class="card variant-filled-surface items-stretch isolate z-50" data-popup="avatar">
 						<a
 							href="/profile"
 							class="btn flex items-center justify-start hover:variant-ghost-secondary rounded-md gap-2"

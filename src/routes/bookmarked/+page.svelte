@@ -33,9 +33,11 @@
 		<span>Közzétéve</span>
 		<span>Szerző</span>
 	</header>
-	<div class="w-full">
+	<ul class="w-full">
 		{#each data.matches.matchedRecords as learningSet}
-			<LearningSetAccordionItemSummary {...learningSet}/>
+			<li class="w-full">
+				<LearningSetAccordionItemSummary {...learningSet} />
+			</li>
 		{:else}
 			<div
 				class="flex items-center text-xl font-semibold gap-4 justify-center py-8 text-surface-400"
@@ -43,7 +45,7 @@
 				<FasQuestion class="text-4xl" /> Még nincs egy mentett tananyagod sem
 			</div>
 		{/each}
-	</div>
+	</ul>
 	<div class="flex items-center justify-between w-full border-surface-500 border-t-2 py-2">
 		<span class="text-sm text-surface-400">
 			Összesen {data.totalCount} darab tananyag található

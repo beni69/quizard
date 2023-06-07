@@ -17,6 +17,10 @@ html {
 	& > body > #sveltekit-body {
 		@apply contents;
 
+		& *::-webkit-scrollbar {
+			@apply h-1;
+		}
+
 		& main {
 			@apply p-4;
 		}

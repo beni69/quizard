@@ -5,6 +5,7 @@
 	import FasArrowRight from "~icons/fa6-solid/arrow-right";
 	import FasRotate from "~icons/fa6-solid/rotate";
 	import FormMessageAlert from "$lib/components/FormMessageAlert.svelte";
+	import FasCircleNotch from "~icons/fa6-solid/circle-notch";
 	import { superForm } from "sveltekit-superforms/client";
 
 	export var data: PageData;
@@ -51,7 +52,12 @@
 			<span class="text-sm text-error-400">{$errors.password?.[0] ?? ""}</span>
 		</label>
 
-		<button class="btn variant-filled-primary !text-white mt-4" type="submit">Küldés</button>
+		<button class="btn variant-filled-primary !text-white mt-4 gap-2" type="submit" disabled={$submitting}>
+			{#if $submitting}
+				<FasCircleNotch class="animate-spin"/>
+			{/if}
+			Bejelentkezés
+		</button>
 	</form>
 
 	{#if $message}

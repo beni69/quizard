@@ -14,7 +14,7 @@
 
 <div class="-translate-x-4 -translate-y-4 w-[calc(100%+2rem)] flex flex-col gap-32">
 	<div class="gradient-bg w-full">
-		<div class="flex flex-col items-center max-w-6xl px-8 mx-auto mt-24 sm:!mt-48 gap-8">
+		<div class="flex flex-col items-center max-w-6xl px-8 mx-auto mt-16 sm:!mt-24 lg:!mt-48 gap-8">
 			{#if mounted}
 				<img
 					src="/logo.svg"
@@ -47,10 +47,10 @@
 				<ul class="mx-auto list-nav border-y border-surface-600 py-4">
 					<li>
 						<a href="/browse">
-							<div class="badge-icon w-8 h-8 variant-soft-primary">
+							<div class="badge-icon h-8 w-8 variant-soft-primary">
 								<FasCompass />
 							</div>
-							<div class="flex flex-col">
+							<div class="flex flex-col whitespace-normal">
 								<span class="font-semibold">Felfedezés</span>
 								<span class="text-surface-400"
 									>Böngéssz és keresd meg a neked megfelelő tananyagot!</span
@@ -60,10 +60,10 @@
 					</li>
 					<li>
 						<a href="/create?redirectToLoginIfUnauthorized" class="flex items-center justify-start">
-							<div class="badge-icon w-8 h-8 variant-soft-primary">
+							<div class="badge-icon h-8 w-8 variant-soft-primary">
 								<FasScrewdriverWrench />
 							</div>
-							<div class="flex flex-col">
+							<div class="flex flex-col whitespace-normal">
 								<span class="font-semibold">Alkotás</span>
 								<span class="text-surface-400">Tégy közzé saját tananyagot!</span>
 							</div>

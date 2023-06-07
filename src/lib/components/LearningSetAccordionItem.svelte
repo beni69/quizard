@@ -2,7 +2,7 @@
 	import { AccordionItem, Avatar, popup } from "@skeletonlabs/skeleton";
 	import { page } from "$app/stores";
 	import { enhance } from "$app/forms";
-	import ReportModal from "./ReportModal.svelte";
+	import ReportLearningSetModal from "./ReportLearningSetModal.svelte";
 	import FasFlag from "~icons/fa6-solid/flag";
 	import FasArrowRight from "~icons/fa6-solid/arrow-right";
 	import FasShareNodes from "~icons/fa6-solid/share-nodes";
@@ -25,6 +25,12 @@
 		avatar: string;
 	};
 	export var user: { id: string } | null;
+
+	const dateFormatter = new Intl.DateTimeFormat("hu-HU", {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});
 
 	var reportModalOpen: boolean = false;
 
@@ -61,6 +67,12 @@
 			};
 		},
 	};
+
+	function searchForTag(tag: string) {
+		const url = $page.url;
+		url.searchParams.set("query", `#${tag}`);
+		return `${url.pathname}${url.search}`;
+	}
 </script>
 
 <AccordionItem>
@@ -68,19 +80,23 @@
 	<div class="card p-4 flex flex-col gap-4 mx-auto" slot="content">
 		<div class="grid grid-cols-[5fr_1fr] gap-8">
 			<div class="flex flex-col gap-2">
-				<header>
+				<header class="flex flex-col gap-1">
 					<h2 class="!text-2xl font-semibold">{name}</h2>
 					<span class="text-surface-400"
-						>Közzétéve: {publishedAt?.toLocaleDateString()} • {likes.length} embernek tetszik</span
+						>Közzétéve: {dateFormatter.format(publishedAt ?? 0)} • {likes.length} embernek tetszik</span
 					>
 				</header>
 				<div class="flex items-start h-full justify-between gap-8">
-					<p class="px-3 py-1 card h-full grow">
-						{description}
+					<p class="px-3 py-1 card h-full grow variant-ghost">
+						{#if description}
+							{description}
+						{:else}
+							<span class="italic text-surface-400">(nincs megadott leírás)</span>
+						{/if}
 					</p>
 					<div class="flex gap-1 flex-wrap min-w-[25%] max-w-[25%]">
 						{#each tags as tag}
-							<span class="badge variant-filled">{tag}</span>
+							<a class="badge variant-filled !text-black !no-underline" href={searchForTag(tag)}>#{tag}</a>
 						{:else}
 							<div class="w-full h-full flex items-center justify-center italic text-surface-400">
 								(nincs hozzáadott címke)
@@ -162,5 +178,5 @@
 	</div>
 </AccordionItem>
 {#if reportModalOpen}
-	<ReportModal {id} bind:open={reportModalOpen} />
+	<ReportLearningSetModal {id} bind:open={reportModalOpen} />
 {/if}
