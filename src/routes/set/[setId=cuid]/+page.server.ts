@@ -11,7 +11,13 @@ export async function load({ locals, params }) {
         },
         include: {
             cards: true,
-            features: true
+            features: true,
+            author: {
+                select: {
+                    avatar: true,
+                    displayName: true
+                }
+            }
         }
     });
 

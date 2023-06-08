@@ -11,9 +11,6 @@ export async function load({ locals }) {
         publishedSetCount: db.learningSet.count({
             where: {
                 authorId: session.userId,
-                publishedAt: {
-                    not: null
-                },
                 visibility: "PUBLIC"
             }
         }),

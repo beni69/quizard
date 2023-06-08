@@ -33,11 +33,12 @@
 		<div class="flex items-center gap-2 mt-3">
 			<p>By:</p>
 			<Avatar
-				src={data.user?.avatar}
+				src={data.learningSet.author.avatar}
 				class="inline-flex items-center"
 				rounded="rounded-full"
 				width="w-8"
 			/>
+			<p>{data.learningSet.author.displayName}</p>
 		</div>
 	</header>
 
@@ -91,7 +92,7 @@
 				{/if}
 			</div>
 		</div>
-	{:else}
+	{:else if data.learningSet.authorId === data.userId}
 		<form action="/create/{data.learningSet.id}?/unpublish" method="post" use:enhance class="mt-8">
 			<button class="btn variant-filled-error gap-2"
 				><FasRotateLeft />Közzététel visszavonása és szerkesztés</button
