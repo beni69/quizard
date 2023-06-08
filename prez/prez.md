@@ -54,6 +54,9 @@ vagy csak szeret új dolgokat tanulni.
 ![Fiókok](img/profile.png)
 
 ##
+![Tananyagok felfedezése](img/browse.png)
+
+##
 ![Tananyag megtekintése](img/set.png)
 
 ##
@@ -64,6 +67,9 @@ vagy csak szeret új dolgokat tanulni.
 
 ##
 ![Tanulókártyák](img/flashcards.png)
+
+##
+![Tanulás vége](img/done.png)
 
 
 # Munkamenet
@@ -79,9 +85,6 @@ vagy csak szeret új dolgokat tanulni.
     - Játékok
     - Végén értékelt "dolgozat"
 - Nyomtatható dolgozat megoldókulcssal
-
-##
-*Nem tervezzük abbahagyni a projektet, simán lehet, hogy a nyáron ezek közül megcsinálunk párat*
 
 
 # [Demo](https://quizard.vbeni.dev){target=_blank}
