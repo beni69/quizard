@@ -24,7 +24,12 @@
 
 {#if isChildOfAccordion}
 	<div class="grid grid-cols-5 gap-2 w-full">
-		<span class="flex items-center font-semibold gap-2"><FasStar class="text-sm text-amber-400"/>{name}</span>
+		<span class="flex items-center font-semibold gap-2">
+			{#if isFeatured}
+				<FasStar class="text-sm text-amber-400"/>
+			{/if}
+			{name}
+		</span>
 		<span class="flex items-center font-normal">{likes.length}</span>
 		<div class="flex items-center gap-1 overflow-auto hide-scrollbar mr-4 rounded-full">
 			{#each tags as tag}
@@ -51,7 +56,12 @@
 		href={href ?? `/set/${id}`}
 	>
 		<div class="grid grid-cols-5 gap-2 w-full">
-			<span class="flex items-center font-semibold gap-2"><FasStar class="text-sm text-amber-400"/>{name}</span>
+			<span class="flex items-center font-semibold gap-2">
+				{#if isFeatured}
+					<FasStar class="text-sm text-amber-400"/>
+				{/if}
+				{name}
+			</span>
 			<span class="flex items-center font-normal">{likes.length}</span>
 			<div class="flex items-center gap-1 overflow-auto hide-scrollbar mr-4 rounded-full">
 				{#each tags as tag}

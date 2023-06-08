@@ -33,7 +33,8 @@ export async function load({ locals, url }) {
                         userId: true
                     }
                 },
-                cards: true
+                cards: true,
+                features: true
             }
         }), page)
     };

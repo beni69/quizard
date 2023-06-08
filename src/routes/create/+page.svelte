@@ -151,7 +151,7 @@
 				<ul>
 					{#each publishedSets as set}
 						<li class="w-full">
-							<LearningSetAccordionItemSummary {...set} href="/set/{set.id}" />
+							<LearningSetAccordionItemSummary {...set} isFeatured={set.features.length > 0} href="/set/{set.id}" />
 						</li>
 					{/each}
 				</ul>
