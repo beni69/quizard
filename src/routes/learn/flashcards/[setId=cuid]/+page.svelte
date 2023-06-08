@@ -17,17 +17,24 @@
 		flipped = false,
 		pbar: string | undefined;
 
-	const next = () =>
-			requestAnimationFrame(() => {
-				flipped = false;
-				let g = gen.next();
-				done = g.done ?? false;
-				if (!done) value = g.value as QuizItem;
-				else {
-					res = g.value as QuizResult;
-					pbar = "bg-green-500";
-				}
-			}),
+	const next = () => {
+			flipped = false;
+			setTimeout(
+				() =>
+					requestAnimationFrame(() => {
+						let g = gen.next();
+						done = g.done ?? false;
+						if (!done) value = g.value as QuizItem;
+						else {
+							res = g.value as QuizResult;
+							pbar = "bg-green-500";
+						}
+					}),
+				// switch halfway through the card flip animation,
+				// otherwise reveals the next solution
+				(0.25 * 1000) / 2
+			);
+		},
 		succ = () => {
 			(value as QuizItem)!.fn(true);
 			next();
@@ -56,13 +63,24 @@
 
 	<section class="flex h-full w-full items-center justify-evenly flex-col">
 		{#if !done && value}
-			<button on:click={flip} class="card border border-primary-500 p-4 w-36">
-				{#if !flipped}
-					{value.card.term}
-				{:else}
-					{value.card.definition}
-				{/if}
-			</button>
+			<div id="flashcard" class={flipped ? "flipped" : ""}>
+				<div id="flashcard-inner">
+					<button
+						id="flashcard-front"
+						on:click={flip}
+						class="card border border-primary-500 p-4 w-36"
+					>
+						{value.card.term}
+					</button>
+					<button
+						id="flashcard-back"
+						on:click={flip}
+						class="card border border-primary-500 p-4 w-36"
+					>
+						{value.card.definition}
+					</button>
+				</div>
+			</div>
 			<div class="flex w-full justify-evenly">
 				<button on:click={fail} class="btn variant-filled-error">
 					<FaX />
@@ -86,3 +104,34 @@
 		{/if}
 	</section>
 </PageContentContainer>
+
+<style>
+	#flashcard {
+		perspective: 1000px;
+	}
+	#flashcard-inner {
+		transition: transform 0.25s ease-in-out;
+		transform-origin: 50% 50%;
+		transform-style: preserve-3d;
+		position: relative;
+	}
+	#flashcard-front,
+	#flashcard-back {
+		backface-visibility: hidden;
+
+		position: absolute;
+		top: 0;
+		left: 0;
+		transform: translate(-50%, -50%);
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	#flashcard-back {
+		transform: translate(-50%, -50%) rotateY(180deg);
+	}
+	#flashcard.flipped > #flashcard-inner {
+		transform: translate(-50%, -50%) rotateY(180deg);
+	}
+</style>

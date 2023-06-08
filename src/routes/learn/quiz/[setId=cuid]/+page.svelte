@@ -83,7 +83,7 @@
 					</button>
 				{/each}
 				{#if reveal !== null}
-					<button on:click={next} class="btn variant-filled-primary w-full">Következő</button>
+					<button on:click={next} class="btn variant-filled-surface w-full">Következő</button>
 				{/if}
 			</div>
 		{:else if res}

@@ -1,5 +1,5 @@
-$OUT="dev.html"
-$CMD="pandoc --verbose prez.md --to=revealjs --standalone --incremental -o $OUT"
+$OUT="prez.html"
+$CMD="pwsh ./build.ps1"
 
 $CMD
 
