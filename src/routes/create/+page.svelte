@@ -6,6 +6,7 @@
 	import FasPlus from "~icons/fa6-solid/plus";
 	import FasPen from "~icons/fa6-solid/pen";
 	import FasTrashCan from "~icons/fa6-solid/trash-can";
+	import FasUpload from "~icons/fa6-solid/upload";
 	import PublishLearningSetDropdown from "$lib/components/PublishLearningSetDropdown.svelte";
 	import DeleteLearningSetModal from "$lib/components/DeleteLearningSetModal.svelte";
 	import CreateLearningSetModal from "$lib/components/CreateLearningSetModal.svelte";
@@ -40,7 +41,7 @@
 		<ul
 			class="w-full flex portrait:flex-wrap items-center content-center gap-8 justify-start portrait:!justify-center px-4 py-6 border border-surface-800 rounded-lg landscape:overflow-auto"
 		>
-			{#each editedSets as { name, description, id, updatedAt }, i}
+			{#each editedSets as { name, description, id, updatedAt, cards }, i (id)}
 				{#if deleteModalOpen[i]}
 					<DeleteLearningSetModal {id} bind:open={deleteModalOpen[i]} />
 				{/if}
@@ -70,7 +71,15 @@
 								<FasPen class="text-sm" />
 								Folytatás
 							</a>
-							<PublishLearningSetDropdown {id} />
+							{#if cards.length < 2}
+								<button class="btn variant-filled-primary gap-2 opacity-50 cursor-not-allowed transition-none !scale-100 hover:!bg-primary-600" use:popup={{event:"hover", target: `publish-blocked-${id}`, placement:"top"}}><FasUpload/>Közzététel</button>
+								<div class="card variant-filled-surface py-2 z-50 text-sm text-center" data-popup="publish-blocked-{id}">
+									A közzétételhez a tananyag legalább 2 kártyát kell tartalmazzon!
+									<div class="arrow variant-filled-surface" />
+								</div>
+							{:else}
+								<PublishLearningSetDropdown {id} />
+							{/if}
 						</div>
 					</li>
 				</div>

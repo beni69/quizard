@@ -1,20 +1,24 @@
 <script lang="ts">
-	import { enhance, type SubmitFunction } from "$app/forms";
+	import { enhance } from "$app/forms";
 	import { invalidateAll } from "$app/navigation";
 	import { fade, fly } from "svelte/transition";
 	import FasCircleExclamation from "~icons/fa6-solid/circle-exclamation";
 	import FasCircleNotch from "~icons/fa6-solid/circle-notch";
+	import { createEventDispatcher } from "svelte";
+	const dispatch = createEventDispatcher<{ submitted: never }>();
 
 	export var id: string;
 	export var open: boolean = true;
+	export var invalidate: boolean = true;
 
 	var isSubmitting = false;
 	const submit = () => {
 		isSubmitting = true;
 		return async () => {
-			await invalidateAll();
+			if (invalidate) await invalidateAll();
 			open = false;
 			isSubmitting = false;
+			dispatch("submitted");
 		};
 	};
 </script>

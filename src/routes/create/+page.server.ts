@@ -24,14 +24,15 @@ export async function load({ locals, url }) {
                     select: {
                         userId: true
                     }
-                }
+                },
+                cards: true
             }
         })
     };
 }
 
 const createSetSchema = z.object({
-    name: z.string().min(4, "A tananyag neve túl rövid!").max(24, "A tananyag neve maximum 24 karakter lehet!"),
+    name: z.string().min(4, "A tananyag neve túl rövid!").max(32, "A tananyag neve maximum 32 karakter lehet!"),
     description: z.string().max(500, "A tananyag leírása maximum 500 karakter lehet!")
 });
 

@@ -12,7 +12,6 @@
 	import FasCompass from "~icons/fa6-solid/compass";
 	import FasUser from "~icons/fa6-solid/user";
 	import FasBookmark from "~icons/fa6-solid/bookmark";
-	import { writable } from "svelte/store";
 	import SignOutButton from "$lib/components/SignOutButton.svelte";
 	import AppRailLink from "$lib/components/AppRailLink.svelte";
 	import type { PageData } from "./$types";
@@ -23,16 +22,18 @@
 <AppShell>
 	<AppRail slot="sidebarLeft">
 		<div class="w-full p-1">
-			<AppRailTile
-				active={writable()}
-				tag="a"
+			<a
 				href="/"
-				style="background-image: url('/logo.svg');"
-				class="bg-center bg-contain bg-no-repeat rounded-2xl hover:bg-secondary-600"
-			/>
+				class="aspect-square flex place-items-center place-content-center !text-white hover:bg-opacity-10 hover:bg-tertiary-600 p-1 rounded-3xl"
+			>
+				<img src="/logo.svg" alt="Quizard logo" />
+			</a>
 		</div>
 
-		<AppRailLink href="/browse" tooltip={{ name: "browse", text: "Felfedezés", placement: "right" }}>
+		<AppRailLink
+			href="/browse"
+			tooltip={{ name: "browse", text: "Felfedezés", placement: "right" }}
+		>
 			<FasCompass />
 		</AppRailLink>
 

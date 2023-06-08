@@ -79,13 +79,13 @@ model LearningSet {
 }
 
 model Card {
-    id Int @id @default(sequence())
-
     term       String
     definition String
 
     learningSetId String
     learningSet   LearningSet @relation(fields: [learningSetId], references: [id], onDelete: Cascade)
+
+    @@id([learningSetId, term])
 }
 
 enum Visibility {

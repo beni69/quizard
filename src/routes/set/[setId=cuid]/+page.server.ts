@@ -15,7 +15,7 @@ export async function load({ locals, params }) {
     });
 
     if (!learningSet) throw error(404);
-    if (learningSet.publishedAt == null || (learningSet.visibility === "UNPUBLISHED" && learningSet.authorId !== session?.userId)) throw error(403);
+    if (learningSet.visibility === "UNPUBLISHED" && learningSet.authorId !== session?.userId) throw error(403);
 
     return { learningSet, userId: session?.userId };
 }

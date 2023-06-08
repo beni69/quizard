@@ -1,4 +1,4 @@
-import { error, fail } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import db from "$lib/server/db";
 
 export async function load({ locals, params }) {
@@ -14,7 +14,7 @@ export async function load({ locals, params }) {
     });
 
     if (!learningSet) throw error(404);
-    if (learningSet.visibility === "PRIVATE" && learningSet.authorId !== session?.userId) throw error(403);
+    if (learningSet.visibility === "UNPUBLISHED" && learningSet.authorId !== session?.userId) throw error(403);
 
     return { learningSet, userId: session?.userId };
 }

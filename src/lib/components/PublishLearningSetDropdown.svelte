@@ -8,8 +8,11 @@
 	import { enhance } from "$app/forms";
 	import { clickOutside } from "svelte-use-click-outside";
 	import { invalidateAll } from "$app/navigation";
+	import { createEventDispatcher } from "svelte";
+	const dispatch = createEventDispatcher<{submitted:never}>();
 
 	export var id: string;
+	export var invalidate: boolean = true;
 
 	var container: HTMLDivElement;
 	$: containerRect = container?.getBoundingClientRect();
@@ -23,8 +26,9 @@
 	async function submit() {
 		isSubmitting = true;
 		return async () => {
-			await invalidateAll();
+			if(invalidate) await invalidateAll();
 			isSubmitting = false;
+			dispatch("submitted");
 		};
 	}
 </script>
