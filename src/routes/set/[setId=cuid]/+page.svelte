@@ -20,7 +20,7 @@
 	</title>
 </svelte:head>
 
-<PageContentContainer class="gap-4">
+<PageContentContainer class="gap-4 max-w-2xl">
 	<header class="mb-2 w-full">
 		<PageHeading>{data.learningSet.name}</PageHeading>
 

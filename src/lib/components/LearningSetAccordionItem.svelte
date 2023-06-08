@@ -25,6 +25,7 @@
 		avatar: string;
 	};
 	export var user: { id: string } | null;
+	export var features: any[] = [];
 
 	const dateFormatter = new Intl.DateTimeFormat("hu-HU", {
 		year: "numeric",
@@ -76,7 +77,7 @@
 </script>
 
 <AccordionItem>
-	<LearningSetAccordionItemSummary {id} {author} {likes} {name} {publishedAt} {tags} slot="summary"/>
+	<LearningSetAccordionItemSummary {id} {author} {likes} {name} {publishedAt} {tags} isFeatured={features.length > 0} slot="summary"/>
 	<div class="card p-4 flex flex-col gap-4 mx-auto" slot="content">
 		<div class="grid grid-cols-[5fr_1fr] gap-8">
 			<div class="flex flex-col gap-2">

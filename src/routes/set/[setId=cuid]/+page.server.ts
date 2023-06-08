@@ -10,7 +10,8 @@ export async function load({ locals, params }) {
             id: params.setId
         },
         include: {
-            cards: true
+            cards: true,
+            features: true
         }
     });
 

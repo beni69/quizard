@@ -71,6 +71,7 @@ model LearningSet {
     likes     UserLikeOnLearningSet[]
     bookmarks UserBookmarkOnLearningSet[]
     reports   UserReportOnLearningSet[]
+    features  FeatureOnLearningSet[]
 
     cards Card[]
 
@@ -136,4 +137,12 @@ model UserReportOnLearningSet {
     reporter   AuthUser @relation(fields: [reporterId], references: [id], onDelete: Cascade)
 
     @@id([learningSetId, reporterId])
+}
+
+model FeatureOnLearningSet {
+    learningSetId String
+    learningSet   LearningSet @relation(fields: [learningSetId], references: [id], onDelete: Cascade)
+    createdAt     DateTime    @default(now())
+
+    @@id([learningSetId])
 }

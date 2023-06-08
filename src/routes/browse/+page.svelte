@@ -7,6 +7,7 @@
 	import FasMagnifyingGlass from "~icons/fa6-solid/magnifying-glass";
 	import FasCaretUp from "~icons/fa6-solid/caret-up";
 	import FasCaretDown from "~icons/fa6-solid/caret-down";
+	import FasStar from "~icons/fa6-solid/star";
 	import PaginationControl from "$lib/components/PaginationControl.svelte";
 	import PageHeading from "$lib/components/PageHeading.svelte";
 	import PageContentContainer from "$lib/components/PageContentContainer.svelte";
@@ -116,4 +117,24 @@
 			Oldal: {data.currentPage + 1}/{data.pageCount}
 		</PaginationControl>
 	</div>
+
+	{#if data.featured.length > 0 && !$page.params.query}
+		<h2 class="flex items-center gap-2"><FasStar /> Kiemelt tananyagok:</h2>
+		<header
+			class="grid grid-cols-5 gap-2 font-bold w-full pl-4 pr-11 py-1 bg-surface-800 -mb-6 rounded-md"
+			>
+			<span>Cím</span>
+			<span>Tetszések</span>
+			<span>Címkék</span>
+			<span>Közzétéve</span>
+			<span>Szerző</span>
+		</header>
+		{#key flipflop}
+			<Accordion class="w-full" autocollapse>
+				{#each data.featured as { learningSet }}
+					<LearningSetAccordionItem {...learningSet} user={data.user} />
+				{/each}
+			</Accordion>
+		{/key}
+	{/if}
 </PageContentContainer>

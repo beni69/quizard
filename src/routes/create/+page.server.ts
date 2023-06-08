@@ -1,6 +1,12 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import db from "$lib/server/db";
 import z from "zod";
+import Pagination from "$lib/server/pagintation";
+
+const pagination = new Pagination(10);
+const searchParamsSchema = z.object({
+    page: z.preprocess(Number, z.number().int().nonnegative().default(0).catch(0)),
+});
 
 export async function load({ locals, url }) {
     const session = await locals.auth.validate();
@@ -8,8 +14,10 @@ export async function load({ locals, url }) {
         if (url.searchParams.get("redirectToLoginIfUnauthorized") != null) throw redirect(302, "/auth/login");
         else throw error(401);
 
+    const { page } = searchParamsSchema.parse(Object.fromEntries(url.searchParams.entries()));
+
     return {
-        learningSets: db.learningSet.findMany({
+        learningSets: pagination.safeQuery(db.learningSet.findMany({
             where: {
                 authorId: session.userId
             },
@@ -27,7 +35,7 @@ export async function load({ locals, url }) {
                 },
                 cards: true
             }
-        })
+        }), page)
     };
 }
 

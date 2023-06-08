@@ -2,6 +2,7 @@
 	import { Avatar } from "@skeletonlabs/skeleton";
 	import { getContext } from "svelte";
 	import FasAngleRight from "~icons/fa6-solid/angle-right";
+	import FasStar from "~icons/fa6-solid/star";
 
 	export var id: string;
 	export var name: string;
@@ -10,6 +11,7 @@
 	export var publishedAt: Date | null;
 	export var author: { avatar: string; displayName: string };
 	export var href: string | undefined = undefined;
+	export var isFeatured: boolean;
 
 	const dateFormatter = new Intl.DateTimeFormat("hu-HU", {
 		year: "numeric",
@@ -22,7 +24,7 @@
 
 {#if isChildOfAccordion}
 	<div class="grid grid-cols-5 gap-2 w-full">
-		<span class="flex items-center font-semibold">{name}</span>
+		<span class="flex items-center font-semibold gap-2"><FasStar class="text-sm text-amber-400"/>{name}</span>
 		<span class="flex items-center font-normal">{likes.length}</span>
 		<div class="flex items-center gap-1 overflow-auto hide-scrollbar mr-4 rounded-full">
 			{#each tags as tag}
@@ -49,7 +51,7 @@
 		href={href ?? `/set/${id}`}
 	>
 		<div class="grid grid-cols-5 gap-2 w-full">
-			<span class="flex items-center font-semibold">{name}</span>
+			<span class="flex items-center font-semibold gap-2"><FasStar class="text-sm text-amber-400"/>{name}</span>
 			<span class="flex items-center font-normal">{likes.length}</span>
 			<div class="flex items-center gap-1 overflow-auto hide-scrollbar mr-4 rounded-full">
 				{#each tags as tag}

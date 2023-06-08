@@ -37,7 +37,8 @@ export async function load({ locals, params, url }) {
                         select: {
                             userId: true
                         }
-                    }
+                    },
+                    features: true
                 }
             },
             id: true,

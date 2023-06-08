@@ -11,6 +11,9 @@
 	import DeleteLearningSetModal from "$lib/components/DeleteLearningSetModal.svelte";
 	import CreateLearningSetModal from "$lib/components/CreateLearningSetModal.svelte";
 	import { popup } from "@skeletonlabs/skeleton";
+	import PaginationControl from "$lib/components/PaginationControl.svelte";
+	import { page } from "$app/stores";
+	import { goto } from "$app/navigation";
 
 	// also show the time of day
 	const dateFormatter = new Intl.DateTimeFormat("hu-HU", {
@@ -23,11 +26,17 @@
 
 	export var data: PageData;
 
-	$: publishedSets = data.learningSets.filter((set) => set.publishedAt != null);
-	$: editedSets = data.learningSets.filter((set) => set.publishedAt == null);
+	$: publishedSets = data.learningSets.matchedRecords.filter((set) => set.publishedAt != null);
+	$: editedSets = data.learningSets.matchedRecords.filter((set) => set.publishedAt == null);
 
 	$: deleteModalOpen = new Array<boolean>(editedSets.length).fill(false);
 	var createModalOpen = false;
+
+	async function gotoPage(page: number) {
+		const url = $page.url;
+		url.searchParams.set("page", page.toString());
+		await goto(url.href);
+	}
 </script>
 
 <svelte:head>
@@ -72,8 +81,15 @@
 								Folytatás
 							</a>
 							{#if cards.length < 2}
-								<button class="btn variant-filled-primary gap-2 opacity-50 cursor-not-allowed transition-none !scale-100 hover:!bg-primary-600" use:popup={{event:"hover", target: `publish-blocked-${id}`, placement:"top"}}><FasUpload/>Közzététel</button>
-								<div class="card variant-filled-surface py-2 z-50 text-sm text-center" data-popup="publish-blocked-{id}">
+								<button
+									class="btn variant-filled-primary gap-2 opacity-50 cursor-not-allowed transition-none !scale-100 hover:!bg-primary-600"
+									use:popup={{ event: "hover", target: `publish-blocked-${id}`, placement: "top" }}
+									><FasUpload />Közzététel</button
+								>
+								<div
+									class="card variant-filled-surface py-2 z-50 text-sm text-center"
+									data-popup="publish-blocked-{id}"
+								>
 									A közzétételhez a tananyag legalább 2 kártyát kell tartalmazzon!
 									<div class="arrow variant-filled-surface" />
 								</div>
@@ -140,6 +156,19 @@
 					{/each}
 				</ul>
 			</div>
+		</div>
+		<div class="flex items-center justify-between w-full border-t-2 border-surface-500 py-2">
+			<span class="text-surface-400 text-sm"
+				>Eddig összesen {data.learningSets.matchCount} tananyagot tettél közzé</span
+			>
+			<PaginationControl
+				{...data.learningSets}
+				let:currentPage
+				let:pageCount
+				on:navigate={(e) => gotoPage(e.detail)}
+			>
+				Oldal: {currentPage + 1}/{pageCount}
+			</PaginationControl>
 		</div>
 	{/if}
 </PageContentContainer>

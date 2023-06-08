@@ -17,16 +17,18 @@
 	export var data: PageData;
 
 	var originalChecksum =
-		data.learningSet.name +
-		data.learningSet.description +
-		data.learningSet.cards.map((card) => (card.term || "\t") + (card.definition || "\t")).join("") +
-		data.learningSet.tags.join("");
+		data.learningSet.name + "\t"+
+		data.learningSet.description +"\t"+
+		data.learningSet.cards.map((card) => (card.term || "\t") + "\t" + (card.definition || "\t")).join("\t") + "\t"
+		data.learningSet.tags.join("\t");
 	$: checksum =
-		data.learningSet.name +
-		data.learningSet.description +
-		data.learningSet.cards.map((card) => (card.term || "\t") + (card.definition || "\t")).join("") +
-		data.learningSet.tags.join("");
+		data.learningSet.name + "\t"+
+		data.learningSet.description + "\t"+
+		data.learningSet.cards.map((card) => (card.term || "\t") + "\t" + (card.definition || "\t")).join("\t") + "\t"
+		data.learningSet.tags.join("\t");
 	$: dirty = checksum !== originalChecksum;
+
+	$:console.log(originalChecksum, checksum)
 
 	var deleteModalOpen = false;
 

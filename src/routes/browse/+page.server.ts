@@ -68,7 +68,8 @@ export async function load({ url }) {
                     select: {
                         userId: true
                     }
-                }
+                },
+                features: true
             }
         }), page)
     ]);
@@ -80,6 +81,23 @@ export async function load({ url }) {
         matches: {
             count: matchCount,
             records: matchedRecords
-        }
+        },
+        featured: db.featureOnLearningSet.findMany({
+            include: {
+                learningSet: {
+                    include: {
+                        likes: true,
+                        bookmarks: true,
+                        author: true,
+                        features: true
+                    }
+                }
+            },
+            where: {
+                learningSet: {
+                    visibility: "PUBLIC"
+                }
+            }
+        })
     };
 }
