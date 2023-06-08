@@ -8,8 +8,7 @@ export async function load({ locals, params }) {
 
     const learningSet = await db.learningSet.findFirst({
         where: {
-            id: params.setId,
-            authorId: session.userId
+            id: params.setId
         },
         include: {
             cards: true
@@ -17,7 +16,7 @@ export async function load({ locals, params }) {
     });
 
     if (!learningSet) throw error(404);
-    if (learningSet.visibility != "UNPUBLISHED") throw error(403);
+    if (learningSet.visibility != "UNPUBLISHED" || learningSet.authorId !== session.userId) throw error(403);
 
     return {
         learningSet
@@ -47,6 +46,7 @@ export const actions = {
         });
 
         if (!learningSet) throw error(404);
+        if(learningSet.authorId !== session.userId) throw error(403);
 
         await db.learningSet.delete({
             where: {
@@ -69,7 +69,7 @@ export const actions = {
 
         if (!learningSet) throw error(404);
         if (learningSet.cards.length < 2) throw error(403);
-        if (learningSet.visibility != "UNPUBLISHED") throw error(403);
+        if (learningSet.visibility != "UNPUBLISHED" || learningSet.authorId !== session.userId) throw error(403);
 
         const result = publishSchema.safeParse(Object.fromEntries(await request.formData()));
         if (!result.success) return fail(400, { errors: result.error.flatten().fieldErrors });
@@ -98,7 +98,7 @@ export const actions = {
         });
 
         if (!learningSet) throw error(404);
-        if (learningSet.visibility != "UNPUBLISHED") throw error(403);
+        if (learningSet.visibility != "UNPUBLISHED" || learningSet.authorId !== session.userId) throw error(403);
 
         const result = updateSchema.safeParse(Object.fromEntries(await request.formData()));
         if (!result.success) return fail(400, { errors: result.error.flatten().fieldErrors });
@@ -159,7 +159,7 @@ export const actions = {
         });
 
         if (!learningSet) throw error(404);
-        if (learningSet.visibility === "UNPUBLISHED") throw error(403);
+        if (learningSet.visibility === "UNPUBLISHED" || learningSet.authorId !== session.userId) throw error(403);
 
         await db.learningSet.update({
             where: {
