@@ -33,7 +33,7 @@
 		"eslint-plugin-svelte3": "^4.0.0",
 		"jsonwebtoken": "^9.0.3",
 		"lucia-auth": "^1.8.0",
-		"postcss": "^8.5.10",
+		"postcss": "^8.5.23",
 		"postcss-import": "^15.1.0",
 		"postcss-load-config": "^4.0.2",
 		"postcss-nesting": "^11.3.0",
